@@ -119,16 +119,6 @@
       "unknown": "Unknown"
     }
   },
-  "runStatus": {
-    "title": "Runs & Lifts Status",
-    "updated": "Updated",
-    "runs": "Runs",
-    "lifts": "Lifts",
-    "runDetails": "Run Details",
-    "liftDetails": "Lift Details",
-    "open": "Open",
-    "closed": "Closed"
-  },
   "alerts": {
     "title": "Alert Rules",
     "description": "Create custom alert rules to get notified about avalanche danger changes",

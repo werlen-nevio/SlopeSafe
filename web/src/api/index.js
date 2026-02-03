@@ -6,7 +6,6 @@ import map from './map';
 import bulletins from './bulletins';
 import historical from './historical';
 import weather from './weather';
-import runStatus from './runStatus';
 
 export default {
   auth,
@@ -16,6 +15,5 @@ export default {
   map,
   bulletins,
   historical,
-  weather,
-  runStatus
+  weather
 };

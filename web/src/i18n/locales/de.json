@@ -65,10 +65,10 @@
     "level": "Stufe",
     "unknown": "Unbekannt",
     "low": "Gering",
-    "moderate": "Mäßig",
+    "moderate": "Mässig",
     "considerable": "Erheblich",
-    "high": "Groß",
-    "veryHigh": "Sehr groß"
+    "high": "Gross",
+    "veryHigh": "Sehr gross"
   },
   "trend": {
     "increasing": "Steigend",
@@ -118,16 +118,6 @@
       "haze": "Dunst",
       "unknown": "Unbekannt"
     }
-  },
-  "runStatus": {
-    "title": "Pisten- & Liftstatus",
-    "updated": "Aktualisiert",
-    "runs": "Pisten",
-    "lifts": "Lifte",
-    "runDetails": "Pistendetails",
-    "liftDetails": "Liftdetails",
-    "open": "Offen",
-    "closed": "Geschlossen"
   },
   "alerts": {
     "title": "Warnregeln",

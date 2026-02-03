@@ -16,6 +16,7 @@ class ResortDetailResource extends JsonResource
     {
         $currentStatus = $this->resortStatuses()->latest()->first();
         $bulletin = $currentStatus?->bulletin;
+        $warningRegion = $currentStatus?->warningRegion;
 
         return [
             'id' => $this->id,
@@ -41,6 +42,11 @@ class ResortDetailResource extends JsonResource
                 'avalanche_problems' => $currentStatus->avalanche_problems ?? [],
                 'valid_until' => $bulletin?->valid_until?->toIso8601String(),
                 'updated_at' => $currentStatus->created_at->toIso8601String(),
+            ] : null,
+            'warning_region' => $warningRegion ? [
+                'id' => $warningRegion->slf_id,
+                'name' => $warningRegion->name,
+                'geometry' => $warningRegion->geometry,
             ] : null,
         ];
     }

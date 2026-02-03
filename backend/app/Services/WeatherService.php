@@ -12,12 +12,12 @@ class WeatherService
 {
     private string $apiKey;
     private string $apiUrl;
-    private int $cacheMinutes = 30;
+    private int $cacheMinutes = 60;
 
     public function __construct()
     {
-        $this->apiKey = config('services.weather.api_key', '');
-        $this->apiUrl = config('services.weather.api_url', 'https://api.openweathermap.org/data/2.5');
+        $this->apiKey = config('services.weather.api_key') ?? '';
+        $this->apiUrl = config('services.weather.api_url') ?? 'https://api.openweathermap.org/data/2.5';
     }
 
     /**

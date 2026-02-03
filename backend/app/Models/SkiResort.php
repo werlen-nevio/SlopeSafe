@@ -83,36 +83,10 @@ class SkiResort extends Model
     }
 
     /**
-     * Get the run status records for this resort.
-     */
-    public function runStatuses(): HasMany
-    {
-        return $this->hasMany(ResortRunStatus::class);
-    }
-
-    /**
-     * Get the current run status.
-     */
-    public function currentRunStatus()
-    {
-        return $this->runStatuses()
-            ->latest('last_updated_at')
-            ->first();
-    }
-
-    /**
      * Alias for currentWeather() - for embed service compatibility.
      */
     public function latestWeatherData()
     {
         return $this->currentWeather();
-    }
-
-    /**
-     * Alias for currentRunStatus() - for embed service compatibility.
-     */
-    public function latestRunStatus()
-    {
-        return $this->currentRunStatus();
     }
 }

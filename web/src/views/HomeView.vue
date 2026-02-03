@@ -31,9 +31,6 @@
     <section class="main-section">
       <div class="section-container">
         <div class="toolbar">
-          <div class="results-count" v-if="!loading && displayResorts.length > 0">
-            {{ displayResorts.length }} {{ displayResorts.length === 1 ? 'resort' : 'resorts' }}
-          </div>
           <div class="sort-controls">
             <label class="sort-label">{{ $t('home.sortBy') }}:</label>
             <select v-model="sortBy" @change="handleSort" class="sort-select">
@@ -240,17 +237,11 @@ onMounted(async () => {
 
 .toolbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: var(--spacing-xl);
   flex-wrap: wrap;
   gap: var(--spacing-md);
-}
-
-.results-count {
-  font-size: 0.9375rem;
-  color: var(--color-text-secondary);
-  font-weight: 500;
 }
 
 .sort-controls {

@@ -43,14 +43,12 @@ class EmbedService
     {
         $status = $resort->currentStatus();
         $weather = $resort->latestWeatherData();
-        $runStatus = $resort->latestRunStatus();
         $config = $this->loadConfiguration($options['config_key'] ?? null);
 
         $data = [
             'resort' => $resort,
             'status' => $status,
             'weather' => $weather,
-            'runStatus' => $runStatus,
             'theme' => $options['theme'] ?? $config?->theme ?? 'light',
             'language' => $options['lang'] ?? $config?->language ?? 'de',
             'auto_rotate' => filter_var($options['auto_rotate'] ?? true, FILTER_VALIDATE_BOOLEAN),

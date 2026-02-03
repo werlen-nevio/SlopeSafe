@@ -51,7 +51,6 @@
                     :level="resort.current_status.danger_levels?.low"
                     :show-text="false"
                   />
-                  {{ resort.current_status.danger_levels?.low || '-' }}
                 </span>
               </div>
               <div class="detail-row">
@@ -61,7 +60,6 @@
                     :level="resort.current_status.danger_levels?.high"
                     :show-text="false"
                   />
-                  {{ resort.current_status.danger_levels?.high || '-' }}
                 </span>
               </div>
               <div class="detail-row">
@@ -71,7 +69,6 @@
                     :level="resort.current_status.danger_levels?.max"
                     :show-text="false"
                   />
-                  {{ resort.current_status.danger_levels?.max }}
                 </span>
               </div>
             </div>
@@ -93,19 +90,22 @@
             </div>
           </div>
 
+          <div class="info-card map-card" v-if="resort.coordinates?.lat && resort.coordinates?.lng">
+            <h2>{{ $t('resort.location', 'Standort') }}</h2>
+            <MiniMap
+              :lat="resort.coordinates.lat"
+              :lng="resort.coordinates.lng"
+              :name="resort.name"
+              :geometry="resort.warning_region?.geometry"
+              :danger-level="resort.current_status?.danger_levels?.max"
+            />
+          </div>
+
           <div class="weather-section">
             <WeatherWidget
               :weather-data="weatherData"
               :loading="weatherLoading"
               :error="weatherError"
-            />
-          </div>
-
-          <div class="run-status-section">
-            <RunStatusWidget
-              :run-status-data="runStatusData"
-              :loading="runStatusLoading"
-              :error="runStatusError"
             />
           </div>
 
@@ -161,11 +161,10 @@ import { useResortsStore } from '@/stores/resorts';
 import { useAuthStore } from '@/stores/auth';
 import { useFavoritesStore } from '@/stores/favorites';
 import { useWeatherStore } from '@/stores/weather';
-import { useRunStatusStore } from '@/stores/runStatus';
 import DangerLevelBadge from '@/components/common/DangerLevelBadge.vue';
 import HistoricalTimeline from '@/components/resort/HistoricalTimeline.vue';
 import WeatherWidget from '@/components/common/WeatherWidget.vue';
-import RunStatusWidget from '@/components/common/RunStatusWidget.vue';
+import MiniMap from '@/components/resort/MiniMap.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -174,7 +173,6 @@ const resortsStore = useResortsStore();
 const authStore = useAuthStore();
 const favoritesStore = useFavoritesStore();
 const weatherStore = useWeatherStore();
-const runStatusStore = useRunStatusStore();
 
 const loading = computed(() => resortsStore.loading);
 const error = computed(() => resortsStore.error);
@@ -191,10 +189,6 @@ const historicalError = ref(null);
 const weatherData = computed(() => weatherStore.weatherData);
 const weatherLoading = computed(() => weatherStore.loading);
 const weatherError = computed(() => weatherStore.error);
-
-const runStatusData = computed(() => runStatusStore.runStatusData);
-const runStatusLoading = computed(() => runStatusStore.loading);
-const runStatusError = computed(() => runStatusStore.error);
 
 const toggleFavorite = async () => {
   if (!resort.value) return;
@@ -238,13 +232,6 @@ onMounted(async () => {
     await weatherStore.fetchWeather(slug);
   } catch (error) {
     console.error('Error fetching weather data:', error);
-  }
-
-  // Fetch run status
-  try {
-    await runStatusStore.fetchRunStatus(slug);
-  } catch (error) {
-    console.error('Error fetching run status:', error);
   }
 });
 </script>
@@ -406,11 +393,6 @@ onMounted(async () => {
   margin: var(--spacing-md) 0;
 }
 
-.run-status-section {
-  grid-column: 1 / -1;
-  margin: var(--spacing-md) 0;
-}
-
 .historical-section {
   grid-column: 1 / -1;
   margin: var(--spacing-md) 0;
@@ -437,6 +419,16 @@ onMounted(async () => {
   margin: 0 0 var(--spacing-lg) 0;
   padding-bottom: var(--spacing-md);
   border-bottom: 2px solid var(--color-primary);
+}
+
+.map-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-card .mini-map-container {
+  flex: 1;
+  min-height: 180px;
 }
 
 .danger-display {

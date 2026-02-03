@@ -124,7 +124,6 @@
         }
 
         .weather-grid,
-        .run-status-grid,
         .problems-list {
             display: grid;
             gap: 1.5rem;
@@ -272,45 +271,6 @@
                     <div class="info-card">
                         <div class="info-label">
                             @if($language === 'de') Keine Wetterdaten @else No weather data @endif
-                        </div>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Run Status Section -->
-                <div class="content-panel hidden" data-panel="runs">
-                    <h2 class="section-title">
-                        @if($language === 'de') Pisten & Lifte @else Runs & Lifts @endif
-                    </h2>
-                    @if($runStatus)
-                    <div class="run-status-grid">
-                        <div class="info-card">
-                            <div class="info-label">
-                                @if($language === 'de') Offene Pisten @else Open Runs @endif
-                            </div>
-                            <div class="info-value">{{ $runStatus->open_runs }} / {{ $runStatus->total_runs }}</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ $runStatus->total_runs > 0 ? ($runStatus->open_runs / $runStatus->total_runs * 100) : 0 }}%">
-                                    {{ $runStatus->total_runs > 0 ? round($runStatus->open_runs / $runStatus->total_runs * 100) : 0 }}%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-label">
-                                @if($language === 'de') Offene Lifte @else Open Lifts @endif
-                            </div>
-                            <div class="info-value">{{ $runStatus->open_lifts }} / {{ $runStatus->total_lifts }}</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ $runStatus->total_lifts > 0 ? ($runStatus->open_lifts / $runStatus->total_lifts * 100) : 0 }}%">
-                                    {{ $runStatus->total_lifts > 0 ? round($runStatus->open_lifts / $runStatus->total_lifts * 100) : 0 }}%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @else
-                    <div class="info-card">
-                        <div class="info-label">
-                            @if($language === 'de') Keine Pistendaten @else No run status data @endif
                         </div>
                     </div>
                     @endif

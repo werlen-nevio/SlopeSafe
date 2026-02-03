@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\V1\HistoricalDataController;
 use App\Http\Controllers\Api\V1\MapController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\ResortController;
-use App\Http\Controllers\Api\V1\RunStatusController;
 use App\Http\Controllers\Api\V1\WeatherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,9 +43,6 @@ Route::prefix('v1')->group(function () {
 
     // Weather routes (public)
     Route::get('/resorts/{slug}/weather', [WeatherController::class, 'show']);
-
-    // Run status routes (public)
-    Route::get('/resorts/{slug}/run-status', [RunStatusController::class, 'show']);
 
     // Bulletin routes (public)
     Route::get('/bulletins/latest', [BulletinController::class, 'latest']);
@@ -83,8 +79,5 @@ Route::prefix('v1')->group(function () {
         Route::put('/alert-rules/{id}', [AlertRuleController::class, 'update']);
         Route::delete('/alert-rules/{id}', [AlertRuleController::class, 'destroy']);
         Route::post('/alert-rules/{id}/toggle', [AlertRuleController::class, 'toggle']);
-
-        // Admin routes (run status updates)
-        Route::post('/admin/resorts/{slug}/run-status', [RunStatusController::class, 'update']);
     });
 });

@@ -29,22 +29,22 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const dangerLevels = {
-  1: { name: 'Low', color: '#ccff66' },
-  2: { name: 'Moderate', color: '#ffff00' },
-  3: { name: 'Considerable', color: '#ff9900' },
-  4: { name: 'High', color: '#ff0000' },
-  5: { name: 'Very High', color: '#9d0000' }
+const dangerLevelKeys = {
+  1: 'low',
+  2: 'moderate',
+  3: 'considerable',
+  4: 'high',
+  5: 'veryHigh'
 };
 
 const dangerName = computed(() => {
-  if (!props.level || !dangerLevels[props.level]) return '';
-  return props.showText ? dangerLevels[props.level].name : '';
+  if (!props.level || !dangerLevelKeys[props.level]) return '';
+  return props.showText ? t(`danger.${dangerLevelKeys[props.level]}`) : '';
 });
 
 const dangerText = computed(() => {
   if (!props.level) return t('danger.unknown');
-  return `${t('danger.level')} ${props.level} - ${dangerLevels[props.level].name}`;
+  return `${t('danger.level')} ${props.level} - ${t(`danger.${dangerLevelKeys[props.level]}`)}`;
 });
 </script>
 
