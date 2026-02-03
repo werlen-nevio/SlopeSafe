@@ -1,0 +1,257 @@
+/* SlopeSafe Theme System - Brand Colors */
+
+:root {
+  /* Brand Colors from Logo */
+  --brand-navy: #1B3B5F;
+  --brand-navy-dark: #132840;
+  --brand-navy-light: #2A4F7A;
+  --brand-sky-blue: #5BA4D4;
+  --brand-sky-blue-light: #7DBDE6;
+  --brand-sky-blue-dark: #4891C2;
+  --brand-orange: #E85A2C;
+  --brand-orange-light: #F07048;
+  --brand-orange-dark: #D04820;
+  --brand-yellow: #F7B731;
+  --brand-white: #FFFFFF;
+
+  /* Light Theme (Default) */
+  --color-background: #FFFFFF;
+  --color-background-secondary: #F8FAFC;
+  --color-background-tertiary: #F1F5F9;
+
+  --color-text-primary: #1B3B5F;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94A3B8;
+
+  --color-border: #E2E8F0;
+  --color-border-light: #F1F5F9;
+
+  --color-primary: #1B3B5F;
+  --color-primary-hover: #132840;
+  --color-primary-light: #E8EEF4;
+
+  --color-accent: #E85A2C;
+  --color-accent-hover: #D04820;
+  --color-accent-light: #FEF2EE;
+
+  --color-success: #10B981;
+  --color-warning: #F7B731;
+  --color-danger: #EF4444;
+  --color-info: #5BA4D4;
+
+  --color-shadow: rgba(27, 59, 95, 0.08);
+  --color-shadow-strong: rgba(27, 59, 95, 0.15);
+
+  /* Avalanche Danger Levels */
+  --danger-1: #CCFF66;
+  --danger-2: #FFFF00;
+  --danger-3: #FF9900;
+  --danger-4: #FF0000;
+  --danger-5: #9D0000;
+
+  --danger-1-text: #1B3B5F;
+  --danger-2-text: #1B3B5F;
+  --danger-3-text: #1B3B5F;
+  --danger-4-text: #FFFFFF;
+  --danger-5-text: #FFFFFF;
+
+  /* Chart Colors */
+  --chart-line: #5BA4D4;
+  --chart-line-secondary: #E85A2C;
+  --chart-grid: #E2E8F0;
+  --chart-text: #475569;
+
+  /* Component Specific */
+  --card-background: #FFFFFF;
+  --card-shadow: 0 1px 3px rgba(27, 59, 95, 0.08), 0 1px 2px rgba(27, 59, 95, 0.06);
+  --card-shadow-hover: 0 10px 15px rgba(27, 59, 95, 0.1), 0 4px 6px rgba(27, 59, 95, 0.05);
+
+  --header-background: #FFFFFF;
+  --header-border: #E2E8F0;
+
+  --input-background: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-focus-border: #5BA4D4;
+
+  --button-background: #E85A2C;
+  --button-hover: #D04820;
+  --button-text: #FFFFFF;
+
+  --button-secondary-background: #1B3B5F;
+  --button-secondary-hover: #132840;
+  --button-secondary-text: #FFFFFF;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Z-index layers */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 900;
+  --z-modal: 1000;
+  --z-tooltip: 1100;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --color-background: #0F172A;
+  --color-background-secondary: #1E293B;
+  --color-background-tertiary: #334155;
+
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #CBD5E1;
+  --color-text-tertiary: #94A3B8;
+
+  --color-border: #334155;
+  --color-border-light: #475569;
+
+  --color-primary: #5BA4D4;
+  --color-primary-hover: #7DBDE6;
+  --color-primary-light: #1E3A5F;
+
+  --color-accent: #F07048;
+  --color-accent-hover: #E85A2C;
+  --color-accent-light: #3D2A24;
+
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-danger: #F87171;
+  --color-info: #7DBDE6;
+
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-shadow-strong: rgba(0, 0, 0, 0.5);
+
+  /* Chart Colors - Brighter for dark mode */
+  --chart-line: #7DBDE6;
+  --chart-line-secondary: #F07048;
+  --chart-grid: #334155;
+  --chart-text: #94A3B8;
+
+  /* Component Specific */
+  --card-background: #1E293B;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.4);
+
+  --header-background: #1E293B;
+  --header-border: #334155;
+
+  --input-background: #334155;
+  --input-border: #475569;
+  --input-focus-border: #5BA4D4;
+
+  --button-background: #E85A2C;
+  --button-hover: #F07048;
+  --button-text: #FFFFFF;
+
+  --button-secondary-background: #5BA4D4;
+  --button-secondary-hover: #7DBDE6;
+  --button-secondary-text: #FFFFFF;
+}
+
+/* Theme transition for smooth switching */
+*,
+*::before,
+*::after {
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+/* Prevent transition on page load */
+.no-transition *,
+.no-transition *::before,
+.no-transition *::after {
+  transition: none !important;
+}
+
+/* Utility Classes */
+.theme-background {
+  background-color: var(--color-background);
+}
+
+.theme-background-secondary {
+  background-color: var(--color-background-secondary);
+}
+
+.theme-text-primary {
+  color: var(--color-text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-border {
+  border-color: var(--color-border);
+}
+
+.theme-card {
+  background-color: var(--card-background);
+  box-shadow: var(--card-shadow);
+}
+
+.theme-card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base body styling with theme support */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  line-height: 1.6;
+}
+
+/* Selection styling */
+::selection {
+  background-color: var(--brand-sky-blue);
+  color: var(--brand-white);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
