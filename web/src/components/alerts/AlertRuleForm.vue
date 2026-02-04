@@ -3,23 +3,14 @@
     <form @submit.prevent="handleSubmit">
       <!-- Resort Selection -->
       <div class="form-group">
-        <label for="resort-select" class="form-label">
+        <label class="form-label">
           {{ $t('alerts.resort') }}
         </label>
-        <select
-          id="resort-select"
+        <CustomSelect
           v-model="formData.ski_resort_id"
-          class="form-select"
-        >
-          <option :value="null">{{ $t('alerts.allResorts') }}</option>
-          <option
-            v-for="resort in resorts"
-            :key="resort.id"
-            :value="resort.id"
-          >
-            {{ resort.name }}
-          </option>
-        </select>
+          :options="resortOptions"
+          :placeholder="$t('alerts.allResorts')"
+        />
       </div>
 
       <!-- Alert Triggers -->
@@ -50,39 +41,25 @@
         <label class="form-label">{{ $t('alerts.dangerLevelRange') }}</label>
         <div class="range-inputs">
           <div class="range-input-group">
-            <label for="min-level" class="range-label">
+            <label class="range-label">
               {{ $t('alerts.minLevel') }}
             </label>
-            <select
-              id="min-level"
-              v-model.number="formData.min_danger_level"
-              class="form-select-sm"
-            >
-              <option :value="null">{{ $t('alerts.noLimit') }}</option>
-              <option :value="1">1 - {{ $t('danger.levels.1') }}</option>
-              <option :value="2">2 - {{ $t('danger.levels.2') }}</option>
-              <option :value="3">3 - {{ $t('danger.levels.3') }}</option>
-              <option :value="4">4 - {{ $t('danger.levels.4') }}</option>
-              <option :value="5">5 - {{ $t('danger.levels.5') }}</option>
-            </select>
+            <CustomSelect
+              v-model="formData.min_danger_level"
+              :options="dangerLevelOptions"
+              :placeholder="$t('alerts.noLimit')"
+            />
           </div>
 
           <div class="range-input-group">
-            <label for="max-level" class="range-label">
+            <label class="range-label">
               {{ $t('alerts.maxLevel') }}
             </label>
-            <select
-              id="max-level"
-              v-model.number="formData.max_danger_level"
-              class="form-select-sm"
-            >
-              <option :value="null">{{ $t('alerts.noLimit') }}</option>
-              <option :value="1">1 - {{ $t('danger.levels.1') }}</option>
-              <option :value="2">2 - {{ $t('danger.levels.2') }}</option>
-              <option :value="3">3 - {{ $t('danger.levels.3') }}</option>
-              <option :value="4">4 - {{ $t('danger.levels.4') }}</option>
-              <option :value="5">5 - {{ $t('danger.levels.5') }}</option>
-            </select>
+            <CustomSelect
+              v-model="formData.max_danger_level"
+              :options="dangerLevelOptions"
+              :placeholder="$t('alerts.noLimit')"
+            />
           </div>
         </div>
       </div>
@@ -171,6 +148,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useResortsStore } from '../../stores/resorts';
+import CustomSelect from '../common/CustomSelect.vue';
 
 const props = defineProps({
   initialData: {
@@ -234,6 +212,22 @@ const isFormValid = computed(() => {
 
 // Resorts list
 const resorts = computed(() => resortsStore.resorts);
+
+const resortOptions = computed(() => [
+  { value: null, label: t('alerts.allResorts') },
+  ...resorts.value.map(resort => ({
+    value: resort.id,
+    label: resort.name
+  }))
+]);
+
+const dangerLevelOptions = computed(() => [
+  { value: 1, label: `1 - ${t('danger.levels.1')}` },
+  { value: 2, label: `2 - ${t('danger.levels.2')}` },
+  { value: 3, label: `3 - ${t('danger.levels.3')}` },
+  { value: 4, label: `4 - ${t('danger.levels.4')}` },
+  { value: 5, label: `5 - ${t('danger.levels.5')}` }
+]);
 
 // Load resorts on mount
 onMounted(async () => {
@@ -303,28 +297,6 @@ const handleSubmit = () => {
   color: var(--color-text-secondary);
 }
 
-.form-select,
-.form-select-sm {
-  width: 100%;
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  font-size: 0.875rem;
-  transition: all var(--transition-base);
-}
-
-.form-select:focus,
-.form-select-sm:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-alpha);
-}
-
-.form-select-sm {
-  font-size: 0.8125rem;
-}
 
 .checkbox-group {
   display: flex;

@@ -33,12 +33,12 @@
         <div class="toolbar">
           <div class="sort-controls">
             <label class="sort-label">{{ $t('home.sortBy') }}:</label>
-            <select v-model="sortBy" @change="handleSort" class="sort-select">
-              <option value="distance">{{ $t('home.sortByDistance') }}</option>
-              <option value="name">{{ $t('home.sortByName') }}</option>
-              <option value="danger">{{ $t('home.sortByDanger') }}</option>
-              <option value="canton">{{ $t('home.sortByCanton') }}</option>
-            </select>
+            <CustomSelect
+              v-model="sortBy"
+              :options="sortOptions"
+              @change="handleSort"
+              class="sort-select"
+            />
           </div>
         </div>
 
@@ -81,8 +81,16 @@ import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useResortsStore } from '@/stores/resorts';
 import ResortCard from '@/components/resort/ResortCard.vue';
+import CustomSelect from '@/components/common/CustomSelect.vue';
 
 const { t } = useI18n();
+
+const sortOptions = computed(() => [
+  { value: 'distance', label: t('home.sortByDistance') },
+  { value: 'name', label: t('home.sortByName') },
+  { value: 'danger', label: t('home.sortByDanger') },
+  { value: 'canton', label: t('home.sortByCanton') }
+]);
 const resortsStore = useResortsStore();
 
 const searchQuery = ref('');
@@ -309,24 +317,7 @@ onMounted(async () => {
 }
 
 .sort-select {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius-md);
-  background-color: var(--input-background);
-  color: var(--color-text-primary);
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.sort-select:hover {
-  border-color: var(--color-primary);
-}
-
-.sort-select:focus {
-  outline: none;
-  border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 3px rgba(91, 164, 212, 0.2);
+  width: 180px;
 }
 
 /* Resorts Grid */

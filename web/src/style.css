@@ -110,6 +110,58 @@ textarea:focus {
   outline: none;
 }
 
+/* Beautiful Select Dropdowns */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231B3B5F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px !important;
+  cursor: pointer;
+  border: 1px solid var(--color-border, #E2E8F0);
+  border-radius: var(--radius-md, 8px);
+  background-color: var(--color-surface, #FFFFFF);
+  color: var(--color-text-primary, #1B3B5F);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+select:hover {
+  border-color: var(--color-primary, #5BA4D4);
+  box-shadow: 0 2px 4px rgba(91, 164, 212, 0.1);
+}
+
+select:focus {
+  border-color: var(--color-primary, #5BA4D4);
+  box-shadow: 0 0 0 3px rgba(91, 164, 212, 0.15), 0 2px 4px rgba(91, 164, 212, 0.1);
+}
+
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--color-surface-variant, #F8FAFC);
+}
+
+/* Select option styling (limited browser support but enhances where available) */
+select option {
+  padding: 8px 12px;
+  background-color: var(--color-surface, #FFFFFF);
+  color: var(--color-text-primary, #1B3B5F);
+}
+
+select option:hover,
+select option:focus {
+  background-color: var(--color-primary-light, #EBF5FB);
+}
+
+select option:checked {
+  background-color: var(--color-primary-light, #EBF5FB);
+  color: var(--color-primary, #5BA4D4);
+}
+
 /* Images */
 img {
   max-width: 100%;

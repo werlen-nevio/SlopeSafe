@@ -22,16 +22,12 @@
         </nav>
 
         <div class="header-actions">
-          <select
+          <CustomSelect
             v-model="currentLocale"
+            :options="languageOptions"
             @change="changeLanguage"
             class="language-selector"
-          >
-            <option value="de">DE</option>
-            <option value="fr">FR</option>
-            <option value="it">IT</option>
-            <option value="en">EN</option>
-          </select>
+          />
 
           <div v-if="isLoggedIn" class="user-menu">
             <button @click="handleLogout" class="btn-logout">
@@ -69,8 +65,16 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import CustomSelect from '@/components/common/CustomSelect.vue';
 
 const { locale, t } = useI18n();
+
+const languageOptions = [
+  { value: 'de', label: 'DE' },
+  { value: 'fr', label: 'FR' },
+  { value: 'it', label: 'IT' },
+  { value: 'en', label: 'EN' }
+];
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -167,25 +171,7 @@ const closeMobileMenu = () => {
 }
 
 .language-selector {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius-md);
-  background-color: var(--input-background);
-  color: var(--color-text-primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.language-selector:hover {
-  border-color: var(--color-primary);
-}
-
-.language-selector:focus {
-  outline: none;
-  border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 3px rgba(91, 164, 212, 0.2);
+  width: 80px;
 }
 
 .auth-links {

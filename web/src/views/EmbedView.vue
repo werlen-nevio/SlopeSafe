@@ -8,12 +8,13 @@
     <!-- Resort Selection -->
     <div class="section">
       <h2 class="section-title">{{ $t('embed.selectResort') }}</h2>
-      <select v-model="selectedResort" class="resort-select" @change="updatePreview">
-        <option :value="null" disabled>{{ $t('embed.chooseResort') }}</option>
-        <option v-for="resort in resorts" :key="resort.id" :value="resort">
-          {{ resort.name }}
-        </option>
-      </select>
+      <CustomSelect
+        v-model="selectedResortId"
+        :options="resortOptions"
+        :placeholder="$t('embed.chooseResort')"
+        @change="handleResortChange"
+        class="resort-select"
+      />
     </div>
 
     <!-- Embed Options -->
@@ -23,28 +24,29 @@
       <div class="options-grid">
         <div class="option-group">
           <label class="option-label">{{ $t('embed.type') }}</label>
-          <select v-model="embedOptions.type" class="option-select" @change="updatePreview">
-            <option value="widget">{{ $t('embed.compactWidget') }}</option>
-            <option value="fullscreen">{{ $t('embed.fullscreenDashboard') }}</option>
-          </select>
+          <CustomSelect
+            v-model="embedOptions.type"
+            :options="typeOptions"
+            @change="updatePreview"
+          />
         </div>
 
         <div class="option-group">
           <label class="option-label">{{ $t('embed.theme') }}</label>
-          <select v-model="embedOptions.theme" class="option-select" @change="updatePreview">
-            <option value="light">{{ $t('embed.lightTheme') }}</option>
-            <option value="dark">{{ $t('embed.darkTheme') }}</option>
-          </select>
+          <CustomSelect
+            v-model="embedOptions.theme"
+            :options="themeOptions"
+            @change="updatePreview"
+          />
         </div>
 
         <div class="option-group">
           <label class="option-label">{{ $t('embed.language') }}</label>
-          <select v-model="embedOptions.lang" class="option-select" @change="updatePreview">
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="it">Italiano</option>
-            <option value="en">English</option>
-          </select>
+          <CustomSelect
+            v-model="embedOptions.lang"
+            :options="langOptions"
+            @change="updatePreview"
+          />
         </div>
       </div>
     </div>
@@ -85,16 +87,48 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useResortsStore } from '../stores/resorts';
 import embedsApi from '../api/embeds';
 import QRCodeDisplay from '../components/embed/QRCodeDisplay.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const { t } = useI18n();
 const resortsStore = useResortsStore();
 
-const selectedResort = ref(null);
+const selectedResortId = ref(null);
+const selectedResort = computed(() =>
+  resorts.value.find(r => r.id === selectedResortId.value) || null
+);
+
+const resortOptions = computed(() =>
+  resorts.value.map(resort => ({
+    value: resort.id,
+    label: resort.name
+  }))
+);
+
+const typeOptions = computed(() => [
+  { value: 'widget', label: t('embed.compactWidget') },
+  { value: 'fullscreen', label: t('embed.fullscreenDashboard') }
+]);
+
+const themeOptions = computed(() => [
+  { value: 'light', label: t('embed.lightTheme') },
+  { value: 'dark', label: t('embed.darkTheme') }
+]);
+
+const langOptions = [
+  { value: 'de', label: 'Deutsch' },
+  { value: 'fr', label: 'Français' },
+  { value: 'it', label: 'Italiano' },
+  { value: 'en', label: 'English' }
+];
+
+const handleResortChange = () => {
+  updatePreview();
+};
 const embedOptions = ref({
   type: 'widget',
   theme: 'light',
@@ -189,20 +223,7 @@ onMounted(async () => {
 }
 
 .resort-select {
-  width: 100%;
   max-width: 400px;
-  padding: var(--spacing-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  font-size: 1rem;
-}
-
-.resort-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-alpha);
 }
 
 .options-grid {
@@ -223,20 +244,6 @@ onMounted(async () => {
   color: var(--color-text-primary);
 }
 
-.option-select {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  font-size: 0.875rem;
-}
-
-.option-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-alpha);
-}
 
 .preview-container {
   background-color: var(--color-surface-variant);
