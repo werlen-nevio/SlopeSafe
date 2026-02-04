@@ -49,7 +49,6 @@
           >
             <div class="timeline-date">
               <span class="date-text">{{ formatDate(day.date) }}</span>
-              <span class="time-text">{{ formatTime(day.date) }}</span>
             </div>
             <div class="timeline-badge">
               <DangerLevelBadge :level="day.danger_level_max" :show-text="false" />
@@ -66,7 +65,7 @@
               <div v-if="day.avalanche_problems && day.avalanche_problems.length > 0" class="problems">
                 <span class="problems-label">{{ $t('resort.avalancheProblems') }}:</span>
                 <span class="problems-list">
-                  {{ day.avalanche_problems.map(p => p.type).join(', ') }}
+                  {{ formatProblems(day.avalanche_problems) }}
                 </span>
               </div>
             </div>
@@ -172,10 +171,9 @@ const formatDate = (dateString) => {
   return format(date, 'MMM d, yyyy');
 };
 
-const formatTime = (dateString) => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return format(date, 'HH:mm');
+const formatProblems = (problems) => {
+  if (!problems || problems.length === 0) return '';
+  return problems.map(p => t(`avalancheTypes.${p.type}`, p.type?.replace(/_/g, ' ') || '')).join(', ');
 };
 </script>
 
@@ -299,11 +297,6 @@ const formatTime = (dateString) => {
   font-weight: 600;
   color: var(--color-text-primary);
   font-size: 0.875rem;
-}
-
-.time-text {
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
 }
 
 .timeline-badge {

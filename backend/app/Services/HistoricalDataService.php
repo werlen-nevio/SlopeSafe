@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class HistoricalDataService
 {
     /**
-     * Get historical resort statuses for a given number of days
+     * Get historical resort statuses for a given number of days (one entry per day, last update)
      *
      * @param SkiResort $resort
      * @param int $days
@@ -18,11 +18,17 @@ class HistoricalDataService
      */
     public function getResortHistory(SkiResort $resort, int $days = 7): Collection
     {
-        return ResortStatus::where('ski_resort_id', $resort->id)
+        $allStatuses = ResortStatus::where('ski_resort_id', $resort->id)
             ->where('created_at', '>=', Carbon::now()->subDays($days))
             ->orderBy('created_at', 'desc')
             ->with('bulletin')
             ->get();
+
+        return $allStatuses->groupBy(function ($status) {
+            return Carbon::parse($status->created_at)->timezone('Europe/Zurich')->format('Y-m-d');
+        })->map(function ($dayStatuses) {
+            return $dayStatuses->first();
+        })->values();
     }
 
     /**

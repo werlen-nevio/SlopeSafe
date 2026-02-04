@@ -118,28 +118,28 @@
             />
           </div>
 
-          <div v-if="resort.current_status?.avalanche_problems" class="info-card">
+          <div v-if="resort.current_status?.avalanche_problems?.length" class="info-card avalanche-problems-card">
             <h2>{{ $t('resort.avalancheProblems') }}</h2>
             <div class="problems-list">
               <div
                 v-for="(problem, index) in resort.current_status.avalanche_problems"
                 :key="index"
-                class="problem-item"
+                class="problem-card"
               >
-                {{ problem }}
-              </div>
-            </div>
-          </div>
-
-          <div v-if="resort.current_status?.aspects" class="info-card">
-            <h2>{{ $t('resort.aspects') }}</h2>
-            <div class="aspects-list">
-              <div
-                v-for="(aspect, index) in resort.current_status.aspects"
-                :key="index"
-                class="aspect-item"
-              >
-                {{ aspect }}
+                <div class="problem-content">
+                  <div class="problem-info">
+                    <div class="problem-header">
+                      <span class="problem-type">{{ formatProblemType(problem.type) }}</span>
+                    </div>
+                    <div class="problem-elevation">
+                      {{ formatElevation(problem.elevation_lower, problem.elevation_upper) }}
+                    </div>
+                  </div>
+                  <div class="problem-compass">
+                    <span class="compass-label">{{ $t('resort.aspects') }}</span>
+                    <AspectCompass :aspects="problem.aspects" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -165,6 +165,7 @@ import DangerLevelBadge from '@/components/common/DangerLevelBadge.vue';
 import HistoricalTimeline from '@/components/resort/HistoricalTimeline.vue';
 import WeatherWidget from '@/components/common/WeatherWidget.vue';
 import MiniMap from '@/components/resort/MiniMap.vue';
+import AspectCompass from '@/components/common/AspectCompass.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -203,6 +204,19 @@ const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
   return date.toLocaleString();
+};
+
+const formatProblemType = (type) => {
+  if (!type) return t('avalancheTypes.unknown');
+  return t(`avalancheTypes.${type}`, type.replace(/_/g, ' '));
+};
+
+const formatElevation = (lower, upper) => {
+  if (!lower && !upper) return t('elevation.allElevations');
+  if (lower && upper) return t('elevation.between', { lower, upper });
+  if (lower) return t('elevation.above', { elevation: lower });
+  if (upper) return t('elevation.below', { elevation: upper });
+  return t('elevation.allElevations');
 };
 
 const handleDaysChange = async (days) => {
@@ -484,30 +498,69 @@ onMounted(async () => {
   gap: var(--spacing-sm);
 }
 
-.problems-list,
-.aspects-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+.avalanche-problems-card {
+  grid-column: 1 / -1;
 }
 
-.problem-item,
-.aspect-item {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--color-background-secondary);
+.problems-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.problem-card {
+  background: var(--color-background-secondary);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
   transition: all var(--transition-base);
 }
 
-.problem-item:hover,
-.aspect-item:hover {
-  background-color: var(--color-background-tertiary);
+.problem-card:hover {
   border-color: var(--color-primary);
-  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.problem-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.problem-info {
+  flex: 1;
+}
+
+.problem-header {
+  margin-bottom: var(--spacing-sm);
+}
+
+.problem-type {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.problem-elevation {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+}
+
+.problem-compass {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.compass-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .last-updated {

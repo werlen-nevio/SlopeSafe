@@ -77,6 +77,32 @@
     "stable": "Stable",
     "unknown": "Unknown"
   },
+  "avalancheTypes": {
+    "wind_slab": "Wind Slab",
+    "persistent_weak_layers": "Persistent Weak Layers",
+    "new_snow": "New Snow",
+    "wet_snow": "Wet Snow",
+    "gliding_snow": "Gliding Snow",
+    "cornices": "Cornices",
+    "unknown": "Unknown"
+  },
+  "aspects": {
+    "N": "North",
+    "NE": "Northeast",
+    "E": "East",
+    "SE": "Southeast",
+    "S": "South",
+    "SW": "Southwest",
+    "W": "West",
+    "NW": "Northwest",
+    "all": "All aspects"
+  },
+  "elevation": {
+    "above": "above {elevation}m",
+    "below": "below {elevation}m",
+    "between": "{lower}m - {upper}m",
+    "allElevations": "All elevations"
+  },
   "historical": {
     "title": "Danger Level History",
     "recentChanges": "Recent Changes"
