@@ -68,6 +68,7 @@
             v-for="resort in displayResorts"
             :key="resort.id"
             :resort="resort"
+            :showFavorite="false"
           />
         </div>
       </div>

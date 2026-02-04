@@ -3,11 +3,25 @@ import { onMounted } from 'vue';
 import AppHeader from './components/common/AppHeader.vue'
 import AppFooter from './components/common/AppFooter.vue'
 import { useThemeStore } from './stores/theme';
+import { useAuthStore } from './stores/auth';
+import { useFavoritesStore } from './stores/favorites';
 
 const themeStore = useThemeStore();
+const authStore = useAuthStore();
+const favoritesStore = useFavoritesStore();
 
-onMounted(() => {
+onMounted(async () => {
   themeStore.initializeTheme();
+  authStore.initializeFromStorage();
+
+  // Load favorites if user is logged in
+  if (authStore.isLoggedIn) {
+    try {
+      await favoritesStore.fetchFavorites();
+    } catch (error) {
+      console.error('Failed to load favorites:', error);
+    }
+  }
 });
 </script>
 

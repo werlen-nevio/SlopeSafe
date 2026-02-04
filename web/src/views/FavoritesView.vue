@@ -26,6 +26,7 @@
           v-for="resort in favorites"
           :key="resort.id"
           :resort="resort"
+          :showFavorite="false"
         />
       </div>
     </div>
@@ -99,7 +100,7 @@ onMounted(async () => {
   display: inline-block;
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background-color: #2563eb;
+  background-color: #f97316;
   color: #ffffff;
   text-decoration: none;
   border-radius: 0.5rem;
@@ -108,7 +109,7 @@ onMounted(async () => {
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: #ea580c;
 }
 
 .resorts-grid {

@@ -12,27 +12,48 @@
 
       <div v-else-if="resort" class="resort-detail">
         <div class="detail-header">
-          <div class="header-top">
-            <router-link to="/" class="back-link">← {{ $t('common.back') }}</router-link>
-            <button
-              v-if="isLoggedIn"
-              @click="toggleFavorite"
-              :class="['favorite-btn-large', { active: isFavorited }]"
-            >
-              <span class="icon">{{ isFavorited ? '★' : '☆' }}</span>
-              {{ isFavorited ? $t('favorites.remove') : $t('favorites.add') }}
-            </button>
-          </div>
+          <div class="header-main">
+            <div class="header-info">
+              <div class="title-row">
+                <router-link to="/" class="back-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </router-link>
+                <div class="title-content">
+                  <h1>{{ resort.name }}</h1>
+                  <div class="resort-meta">
+                    <span class="meta-item">
+                      <strong>{{ $t('resort.canton') }}:</strong> {{ resort.canton }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <h1>{{ resort.name }}</h1>
+            <div class="header-right">
+              <button
+                v-if="isLoggedIn"
+                @click="toggleFavorite"
+                :class="['favorite-btn', { active: isFavorited }]"
+                :title="isFavorited ? $t('favorites.remove') : $t('favorites.add')"
+              >
+                <svg viewBox="0 0 24 24" :fill="isFavorited ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
 
-          <div class="resort-meta">
-            <span class="meta-item">
-              <strong>{{ $t('resort.canton') }}:</strong> {{ resort.canton }}
-            </span>
-            <span class="meta-item">
-              <strong>{{ $t('resort.region') }}:</strong> {{ resort.region || '-' }}
-            </span>
+              <div class="resort-logo">
+              <img
+                v-if="resort.logo_url && !logoError"
+                :src="resort.logo_url"
+                :alt="resort.name"
+                class="logo-image"
+                @error="logoError = true"
+              />
+              <span v-else class="logo-fallback">{{ resort.name?.charAt(0) }}</span>
+            </div>
+            </div>
           </div>
         </div>
 
@@ -186,6 +207,7 @@ const isFavorited = computed(() =>
 const historicalData = computed(() => resortsStore.historicalData);
 const historicalLoading = computed(() => resortsStore.historicalLoading);
 const historicalError = ref(null);
+const logoError = ref(false);
 
 const weatherData = computed(() => weatherStore.weatherData);
 const weatherLoading = computed(() => weatherStore.loading);
@@ -232,6 +254,15 @@ const handleDaysChange = async (days) => {
 onMounted(async () => {
   const slug = route.params.slug;
   await resortsStore.fetchResortBySlug(slug);
+
+  // Fetch favorites if logged in
+  if (authStore.isLoggedIn) {
+    try {
+      await favoritesStore.fetchFavorites();
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    }
+  }
 
   // Fetch historical data (default 7 days)
   try {
@@ -288,11 +319,41 @@ onMounted(async () => {
   border: 1px solid var(--color-border);
 }
 
-.header-top {
+.header-right {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.favorite-btn:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  transform: scale(1.05);
+}
+
+.favorite-btn.active {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.favorite-btn svg {
+  width: 22px;
+  height: 22px;
 }
 
 .back-link {
@@ -311,60 +372,89 @@ onMounted(async () => {
   transform: translateX(-4px);
 }
 
-.favorite-btn-large {
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+}
+
+.header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.title-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--card-background);
-  border: 2px solid var(--color-border);
+  gap: var(--spacing-lg);
+}
+
+.title-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-lg);
-  font-weight: 600;
-  cursor: pointer;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  text-decoration: none;
   transition: all var(--transition-base);
+  flex-shrink: 0;
 }
 
-.favorite-btn-large:hover {
-  border-color: #fbbf24;
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow-hover);
+.back-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: translateX(-2px);
 }
 
-.favorite-btn-large.active {
-  border-color: #fbbf24;
-  background-color: rgba(251, 191, 36, 0.1);
-}
-
-.favorite-btn-large .icon {
-  font-size: 1.5rem;
-  color: var(--color-border);
-  transition: all var(--transition-base);
-}
-
-.favorite-btn-large:hover .icon {
-  transform: scale(1.1);
-}
-
-.favorite-btn-large.active .icon {
-  color: #fbbf24;
-  animation: starPulse 1s ease-in-out infinite;
-}
-
-@keyframes starPulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.15);
-  }
+.back-btn svg {
+  width: 24px;
+  height: 24px;
 }
 
 .detail-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--color-text-primary);
-  margin: 0 0 var(--spacing-md) 0;
+  margin: 0;
   line-height: 1.2;
+}
+
+.resort-logo {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-lg);
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--spacing-sm);
+}
+
+.logo-fallback {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .resort-meta {
@@ -591,20 +681,42 @@ onMounted(async () => {
     font-size: 1.75rem;
   }
 
-  .resort-meta {
-    flex-direction: column;
-    gap: var(--spacing-sm);
+  .header-main {
+    flex-direction: row;
+    align-items: center;
   }
 
-  .header-top {
-    flex-direction: column;
-    align-items: flex-start;
+  .resort-logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .logo-fallback {
+    font-size: 1.5rem;
+  }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .title-row {
     gap: var(--spacing-md);
   }
 
-  .favorite-btn-large {
-    width: 100%;
-    justify-content: center;
+  .favorite-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .favorite-btn svg {
+    width: 18px;
+    height: 18px;
   }
 
   .info-card {
@@ -659,6 +771,15 @@ onMounted(async () => {
 
   .detail-header h1 {
     font-size: 2.75rem;
+  }
+
+  .resort-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .logo-fallback {
+    font-size: 2.5rem;
   }
 }
 </style>

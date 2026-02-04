@@ -18,7 +18,10 @@ class FavoriteController extends Controller
         $user = $request->user();
         $favorites = $user->favoriteResorts()->get();
 
-        return ResortResource::collection($favorites);
+        return response()->json([
+            'success' => true,
+            'favorites' => ResortResource::collection($favorites),
+        ]);
     }
 
     /**

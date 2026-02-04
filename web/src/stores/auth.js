@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import api from '@/api';
+import { useFavoritesStore } from './favorites';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -27,6 +28,10 @@ export const useAuthStore = defineStore('auth', {
           this.isAuthenticated = true;
           localStorage.setItem('auth_token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
+
+          // Initialize favorites after registration
+          const favoritesStore = useFavoritesStore();
+          favoritesStore.fetchFavorites().catch(console.error);
         }
         return response;
       } catch (error) {
@@ -48,6 +53,10 @@ export const useAuthStore = defineStore('auth', {
           this.isAuthenticated = true;
           localStorage.setItem('auth_token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
+
+          // Fetch favorites after successful login
+          const favoritesStore = useFavoritesStore();
+          favoritesStore.fetchFavorites().catch(console.error);
         }
         return response;
       } catch (error) {
@@ -69,6 +78,10 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false;
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
+
+        // Clear favorites on logout
+        const favoritesStore = useFavoritesStore();
+        favoritesStore.$reset();
       }
     },
 

@@ -23,7 +23,9 @@
             :class="['favorite-btn', { active: isFavorited }]"
             :title="isFavorited ? $t('favorites.remove') : $t('favorites.add')"
           >
-            <span class="favorite-icon">{{ isFavorited ? '★' : '☆' }}</span>
+            <svg class="favorite-icon" viewBox="0 0 24 24" :fill="isFavorited ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -183,17 +185,17 @@ const formatDate = (dateString) => {
   border: none;
   cursor: pointer;
   padding: var(--spacing-xs);
-  font-size: 1.5rem;
-  color: var(--color-border);
+  color: var(--color-text-secondary);
   transition: all var(--transition-base);
 }
 
 .favorite-btn:hover {
-  transform: scale(1.15) rotate(15deg);
+  transform: scale(1.15);
+  color: var(--color-danger, #ef4444);
 }
 
 .favorite-btn.active {
-  color: #fbbf24;
+  color: var(--color-danger, #ef4444);
   animation: heartbeat 0.5s ease;
 }
 
@@ -208,6 +210,8 @@ const formatDate = (dateString) => {
 
 .favorite-icon {
   display: block;
+  width: 22px;
+  height: 22px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
