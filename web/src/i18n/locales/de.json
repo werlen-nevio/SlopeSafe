@@ -15,8 +15,7 @@
   "nav": {
     "home": "Startseite",
     "map": "Karte",
-    "favorites": "Favoriten",
-    "alerts": "Warnungen"
+    "favorites": "Favoriten"
   },
   "auth": {
     "login": "Anmelden",
@@ -144,58 +143,6 @@
       "fog": "Nebel",
       "haze": "Dunst",
       "unknown": "Unbekannt"
-    }
-  },
-  "alerts": {
-    "title": "Warnregeln",
-    "description": "Erstellen Sie benutzerdefinierte Warnregeln, um über Änderungen der Lawinengefahr benachrichtigt zu werden",
-    "createRule": "Warnregel erstellen",
-    "createNewRule": "Neue Warnregel erstellen",
-    "editRule": "Warnregel bearbeiten",
-    "noRules": "Noch keine Warnregeln",
-    "noRulesDescription": "Erstellen Sie Warnregeln, um benachrichtigt zu werden, wenn sich die Lawinengefahrenstufen für Ihre Lieblingsskigebiete ändern",
-    "resort": "Skigebiet",
-    "allResorts": "Alle Skigebiete",
-    "triggerOn": "Warnung auslösen bei",
-    "onIncrease": "Gefahrenstufe steigt",
-    "onDecrease": "Gefahrenstufe sinkt",
-    "dangerLevelRange": "Gefahrenstufenbereich",
-    "minLevel": "Minimalstufe",
-    "maxLevel": "Maximalstufe",
-    "noLimit": "Keine Begrenzung",
-    "enableDailyReminder": "Tägliche Erinnerung aktivieren",
-    "reminderTime": "Erinnerungszeit",
-    "activeDays": "Aktive Tage",
-    "ruleActive": "Regel ist aktiv",
-    "active": "Aktiv",
-    "inactive": "Inaktiv",
-    "activate": "Aktivieren",
-    "deactivate": "Deaktivieren",
-    "triggers": "Auslöser",
-    "increase": "Anstieg",
-    "decrease": "Rückgang",
-    "dangerRange": "Gefahrenbereich",
-    "min": "Min",
-    "max": "Max",
-    "dailyReminder": "Tägliche Erinnerung",
-    "created": "Erstellt",
-    "confirmDelete": "Warnregel löschen?",
-    "confirmDeleteDescription": "Möchten Sie diese Warnregel wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "days": {
-      "monday": "Montag",
-      "tuesday": "Dienstag",
-      "wednesday": "Mittwoch",
-      "thursday": "Donnerstag",
-      "friday": "Freitag",
-      "saturday": "Samstag",
-      "sunday": "Sonntag",
-      "mondayShort": "Mo",
-      "tuesdayShort": "Di",
-      "wednesdayShort": "Mi",
-      "thursdayShort": "Do",
-      "fridayShort": "Fr",
-      "saturdayShort": "Sa",
-      "sundayShort": "So"
     }
   },
   "embed": {

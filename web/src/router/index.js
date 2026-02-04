@@ -7,7 +7,6 @@ import FavoritesView from '@/views/FavoritesView.vue';
 import MapView from '@/views/MapView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
-import AlertRulesView from '@/views/AlertRulesView.vue';
 import EmbedView from '@/views/EmbedView.vue';
 
 const routes = [
@@ -34,12 +33,6 @@ const routes = [
     name: 'map',
     component: MapView,
     meta: { title: 'Map' }
-  },
-  {
-    path: '/alerts',
-    name: 'alerts',
-    component: AlertRulesView,
-    meta: { requiresAuth: true, title: 'Alert Rules' }
   },
   {
     path: '/embed',

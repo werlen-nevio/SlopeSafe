@@ -15,7 +15,6 @@
             <li><router-link to="/">{{ $t('nav.home') }}</router-link></li>
             <li><router-link to="/map">{{ $t('nav.map') }}</router-link></li>
             <li v-if="isLoggedIn"><router-link to="/favorites">{{ $t('nav.favorites') }}</router-link></li>
-            <li v-if="isLoggedIn"><router-link to="/alerts">{{ $t('nav.alerts') }}</router-link></li>
           </ul>
         </div>
 

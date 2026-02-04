@@ -16,9 +16,6 @@
           <router-link v-if="isLoggedIn" to="/favorites" class="nav-link" @click="closeMobileMenu">
             {{ $t('nav.favorites') }}
           </router-link>
-          <router-link v-if="isLoggedIn" to="/alerts" class="nav-link" @click="closeMobileMenu">
-            {{ $t('nav.alerts') }}
-          </router-link>
         </nav>
 
         <div class="header-actions">
