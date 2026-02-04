@@ -178,4 +178,28 @@ const formattedUpdateTime = computed(() => {
     gap: var(--spacing-md);
   }
 }
+
+@media (max-width: 360px) {
+  .footer-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .footer-content {
+    padding: var(--spacing-md) 0;
+    gap: var(--spacing-md);
+  }
+
+  .footer-tagline,
+  .footer-credit {
+    font-size: 0.75rem;
+  }
+
+  .footer-logo-image {
+    height: 28px;
+  }
+
+  .copyright {
+    font-size: 0.75rem;
+  }
+}
 </style>

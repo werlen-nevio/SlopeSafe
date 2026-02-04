@@ -53,30 +53,30 @@ onMounted(async () => {
 
 <style scoped>
 .favorites-view {
-  padding: 2rem 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 var(--spacing-md);
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-xl);
 }
 
 .page-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 0.5rem 0;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
 }
 
 .subtitle {
   font-size: 1.125rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -84,38 +84,39 @@ onMounted(async () => {
 .error,
 .no-favorites {
   text-align: center;
-  padding: 3rem;
+  padding: var(--spacing-2xl);
   font-size: 1.125rem;
 }
 
 .error {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .no-favorites {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .btn-primary {
   display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #f97316;
-  color: #ffffff;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-accent);
+  color: var(--button-text);
   text-decoration: none;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-base);
+  min-height: var(--touch-target-min);
 }
 
 .btn-primary:hover {
-  background-color: #ea580c;
+  background-color: var(--color-accent-hover);
 }
 
 .resorts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: var(--spacing-lg);
 }
 
 @media (max-width: 768px) {
@@ -125,6 +126,38 @@ onMounted(async () => {
 
   .resorts-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .favorites-view {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .favorites-view {
+    padding: var(--spacing-md) 0;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-header {
+    margin-bottom: var(--spacing-lg);
   }
 }
 </style>

@@ -177,6 +177,8 @@ const formatForecastDate = (dateString) => {
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .loading,
@@ -343,9 +345,10 @@ const formatForecastDate = (dateString) => {
 }
 
 .forecast-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
+  justify-content: center;
 }
 
 .forecast-item {
@@ -358,6 +361,9 @@ const formatForecastDate = (dateString) => {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   transition: all var(--transition-base);
+  flex: 1 1 calc(20% - var(--spacing-sm));
+  min-width: 60px;
+  max-width: 120px;
 }
 
 .forecast-item:hover {
@@ -415,8 +421,53 @@ const formatForecastDate = (dateString) => {
     grid-template-columns: 1fr;
   }
 
+  .forecast-item {
+    flex: 1 1 calc(20% - var(--spacing-sm));
+    min-width: 55px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .weather-widget {
+    padding: var(--spacing-md);
+  }
+
+  .weather-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .temp-value {
+    font-size: 2rem;
+  }
+
+  .weather-icon {
+    font-size: 2rem;
+  }
+
+  .current-details {
+    padding: var(--spacing-sm);
+  }
+
   .forecast-list {
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: var(--spacing-xs);
+  }
+
+  .forecast-item {
+    padding: var(--spacing-sm);
+    min-width: 50px;
+  }
+
+  .forecast-icon {
+    font-size: 1.5rem;
+  }
+
+  .detail-item {
+    padding: var(--spacing-sm);
+  }
+
+  .forecast h4 {
+    font-size: 1rem;
   }
 }
 </style>

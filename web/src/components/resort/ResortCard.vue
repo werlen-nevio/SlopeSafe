@@ -273,5 +273,47 @@ const formatDate = (dateString) => {
   .resort-name {
     font-size: 1.125rem;
   }
+
+  .favorite-btn {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-header {
+    padding: var(--spacing-sm);
+  }
+
+  .card-body {
+    padding: var(--spacing-sm);
+  }
+
+  .resort-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .resort-name {
+    font-size: 1rem;
+  }
+
+  .resort-identity {
+    gap: var(--spacing-sm);
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+  }
+
+  .label,
+  .value {
+    font-size: 0.8125rem;
+  }
 }
 </style>

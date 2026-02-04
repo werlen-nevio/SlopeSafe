@@ -16,6 +16,33 @@
           <router-link v-if="isLoggedIn" to="/favorites" class="nav-link" @click="closeMobileMenu">
             {{ $t('nav.favorites') }}
           </router-link>
+
+          <!-- Mobile-only auth links -->
+          <div class="mobile-auth-links">
+            <template v-if="isLoggedIn">
+              <button @click="handleLogout; closeMobileMenu()" class="nav-link mobile-logout">
+                {{ $t('auth.logout') }}
+              </button>
+            </template>
+            <template v-else>
+              <router-link to="/login" class="nav-link" @click="closeMobileMenu">
+                {{ $t('auth.login') }}
+              </router-link>
+              <router-link to="/register" class="nav-link nav-link-accent" @click="closeMobileMenu">
+                {{ $t('auth.register') }}
+              </router-link>
+            </template>
+          </div>
+
+          <!-- Mobile-only language selector -->
+          <div class="mobile-language-selector">
+            <CustomSelect
+              v-model="currentLocale"
+              :options="languageOptions"
+              @change="changeLanguage"
+              class="language-selector-mobile"
+            />
+          </div>
         </nav>
 
         <div class="header-actions">
@@ -169,6 +196,7 @@ const closeMobileMenu = () => {
 
 .language-selector {
   width: 80px;
+  min-width: 70px;
 }
 
 .auth-links {
@@ -228,6 +256,16 @@ const closeMobileMenu = () => {
   border: none;
   cursor: pointer;
   padding: var(--spacing-sm);
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+}
+
+.mobile-auth-links {
+  display: none;
+}
+
+.mobile-language-selector {
+  display: none;
 }
 
 .hamburger {
@@ -326,6 +364,62 @@ const closeMobileMenu = () => {
 
   .user-menu {
     display: none;
+  }
+
+  .mobile-auth-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--header-border);
+  }
+
+  .mobile-logout {
+    background: none;
+    border: none;
+    color: var(--color-danger);
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .nav-link-accent {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  .language-selector {
+    display: none;
+  }
+
+  .mobile-language-selector {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--header-border);
+  }
+
+  .language-selector-mobile {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-content {
+    height: 56px;
+  }
+
+  .logo-image {
+    height: 32px;
+  }
+
+  .nav-menu {
+    top: 56px;
+  }
+
+  .header-container {
+    padding: 0 var(--spacing-sm);
   }
 }
 </style>

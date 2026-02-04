@@ -206,6 +206,7 @@ onUnmounted(() => {
 .mini-map-container {
   width: 100%;
   height: 200px;
+  min-height: 150px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -214,5 +215,26 @@ onUnmounted(() => {
 .mini-map {
   width: 100%;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .mini-map-container {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mini-map-container {
+    height: 160px;
+    min-height: 140px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mini-map-container {
+    height: 140px;
+    min-height: 120px;
+    border-radius: var(--radius-md);
+  }
 }
 </style>

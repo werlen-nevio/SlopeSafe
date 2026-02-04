@@ -301,4 +301,23 @@ onUnmounted(() => {
     min-height: 400px;
   }
 }
+
+@media (max-width: 480px) {
+  .map-view {
+    padding: var(--spacing-sm);
+  }
+
+  .map-wrapper {
+    height: calc(100vh - 180px);
+    min-height: 350px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 360px) {
+  .map-wrapper {
+    min-height: 300px;
+    border-radius: var(--radius-md);
+  }
+}
 </style>

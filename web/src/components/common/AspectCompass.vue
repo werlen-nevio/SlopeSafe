@@ -119,4 +119,35 @@ const isActive = (direction) => {
   stroke: var(--color-border);
   stroke-width: 1;
 }
+
+@media (max-width: 768px) {
+  .compass-svg {
+    width: 55px;
+    height: 55px;
+  }
+
+  .label {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .compass-svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .label {
+    font-size: 0.625rem;
+    min-width: 12px;
+  }
+
+  .compass-container {
+    gap: 1px;
+  }
+
+  .compass-row {
+    gap: 2px;
+  }
+}
 </style>

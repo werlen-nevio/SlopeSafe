@@ -28,6 +28,16 @@
                     </span>
                   </div>
                 </div>
+                <button
+                  v-if="isLoggedIn"
+                  @click="toggleFavorite"
+                  :class="['favorite-btn', 'favorite-btn-mobile', { active: isFavorited }]"
+                  :title="isFavorited ? $t('favorites.remove') : $t('favorites.add')"
+                >
+                  <svg viewBox="0 0 24 24" :fill="isFavorited ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
               </div>
             </div>
 
@@ -286,12 +296,15 @@ onMounted(async () => {
   padding: var(--spacing-xl) 0;
   background: var(--color-background);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .loading,
@@ -354,6 +367,10 @@ onMounted(async () => {
 .favorite-btn svg {
   width: 22px;
   height: 22px;
+}
+
+.favorite-btn-mobile {
+  display: none;
 }
 
 .back-link {
@@ -480,6 +497,8 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-lg);
+  min-width: 0;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -491,6 +510,8 @@ onMounted(async () => {
 .weather-section,
 .historical-section {
   grid-column: 1 / -1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .info-card {
@@ -500,6 +521,8 @@ onMounted(async () => {
   box-shadow: var(--card-shadow);
   border: 1px solid var(--color-border);
   transition: all var(--transition-base);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .info-card:hover {
@@ -564,9 +587,6 @@ onMounted(async () => {
 
 .detail-row:hover {
   background: var(--color-background-secondary);
-  margin: 0 calc(-1 * var(--spacing-sm));
-  padding-left: var(--spacing-sm);
-  padding-right: var(--spacing-sm);
   border-radius: var(--radius-sm);
 }
 
@@ -588,6 +608,8 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  word-break: break-word;
+  text-align: right;
 }
 
 .problems-list {
@@ -674,30 +696,52 @@ onMounted(async () => {
   }
 
   .detail-header {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 
   .detail-header h1 {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
+    word-break: break-word;
   }
 
   .header-main {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+
+  .header-right {
+    display: none;
+  }
+
+  .title-row {
+    gap: var(--spacing-sm);
+    justify-content: space-between;
+  }
+
+  .favorite-btn-mobile {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .title-content {
+    min-width: 0;
+    flex: 1;
   }
 
   .resort-logo {
-    width: 60px;
-    height: 60px;
+    display: none;
   }
 
   .logo-fallback {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .back-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .back-btn svg {
@@ -705,18 +749,18 @@ onMounted(async () => {
     height: 20px;
   }
 
-  .title-row {
-    gap: var(--spacing-md);
-  }
-
   .favorite-btn {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .favorite-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .resort-meta {
+    font-size: 0.875rem;
   }
 
   .info-card {
@@ -752,6 +796,26 @@ onMounted(async () => {
   .last-updated {
     grid-column: 1 / -1;
   }
+
+  .label {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .detail-row {
+    padding: var(--spacing-sm) 0;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .value {
+    font-size: 0.875rem;
+    min-width: 0;
+  }
+
+  .info-card {
+    overflow: hidden;
+  }
 }
 
 /* Tablet */
@@ -780,6 +844,70 @@ onMounted(async () => {
 
   .logo-fallback {
     font-size: 2.5rem;
+  }
+}
+
+/* Very Small Screens */
+@media (max-width: 360px) {
+  .resort-detail-view {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .detail-header {
+    padding: var(--spacing-sm);
+  }
+
+  .detail-header h1 {
+    font-size: 1.125rem;
+  }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info-card {
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .info-card h2 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+  }
+
+  .problem-card {
+    padding: var(--spacing-sm);
+  }
+
+  .problem-type {
+    font-size: 0.9375rem;
+  }
+
+  .problem-elevation {
+    font-size: 0.8125rem;
+  }
+
+  .resort-meta {
+    font-size: 0.8125rem;
+  }
+
+  .title-row {
+    gap: var(--spacing-xs);
+  }
+
+  .detail-content {
+    gap: var(--spacing-sm);
+  }
+
+  .detail-header {
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-lg);
   }
 }
 </style>

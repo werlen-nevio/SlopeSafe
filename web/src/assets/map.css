@@ -326,5 +326,54 @@
   .map-control-btn {
     padding: 6px 10px;
     font-size: 0.75rem;
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-wrapper {
+    height: 350px;
+  }
+
+  .resort-marker {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+
+  .map-popup {
+    min-width: 180px;
+  }
+
+  .map-popup h3 {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .map-wrapper {
+    height: 300px;
+  }
+
+  .map-legend {
+    bottom: 5px;
+    right: 5px;
+    padding: var(--spacing-xs);
+    min-width: 100px;
+  }
+
+  .legend-color {
+    width: 14px;
+    height: 14px;
+  }
+
+  .legend-item {
+    font-size: 0.5625rem;
+  }
+
+  .map-error {
+    padding: var(--spacing-md);
+    max-width: 250px;
   }
 }

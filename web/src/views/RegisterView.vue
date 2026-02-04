@@ -310,4 +310,33 @@ const handleRegister = async () => {
     padding: var(--spacing-xl);
   }
 }
+
+@media (max-width: 360px) {
+  .register-view {
+    padding: var(--spacing-sm);
+  }
+
+  .auth-card {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-logo-image {
+    height: 44px;
+  }
+
+  .form-input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9375rem;
+  }
+
+  .btn-submit {
+    min-height: var(--touch-target-min);
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+}
 </style>

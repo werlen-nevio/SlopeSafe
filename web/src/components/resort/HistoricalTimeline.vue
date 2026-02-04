@@ -183,6 +183,8 @@ const formatProblems = (problems) => {
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .timeline-header {
@@ -252,6 +254,8 @@ const formatProblems = (problems) => {
   background: var(--color-background-secondary);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .timeline-details h4 {
@@ -308,6 +312,8 @@ const formatProblems = (problems) => {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .danger-levels {
@@ -336,9 +342,10 @@ const formatProblems = (problems) => {
 
 .problems {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-sm);
   font-size: 0.875rem;
+  flex-wrap: wrap;
 }
 
 .problems-label {
@@ -349,6 +356,7 @@ const formatProblems = (problems) => {
 .problems-list {
   color: var(--color-text-primary);
   text-transform: capitalize;
+  word-break: break-word;
 }
 
 /* Mobile responsive */
@@ -374,6 +382,42 @@ const formatProblems = (problems) => {
   .time-selector {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .time-btn {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 360px) {
+  .historical-timeline {
+    padding: var(--spacing-md);
+  }
+
+  .header-content h3 {
+    font-size: 1.25rem;
+  }
+
+  .timeline-details h4 {
+    font-size: 1rem;
+  }
+
+  .chart-container {
+    padding: var(--spacing-sm);
+  }
+
+  .timeline-item {
+    padding: var(--spacing-sm);
+  }
+
+  .date-text {
+    font-size: 0.8125rem;
+  }
+
+  .level-value {
+    font-size: 0.875rem;
   }
 }
 </style>

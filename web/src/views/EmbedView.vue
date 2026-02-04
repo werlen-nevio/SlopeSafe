@@ -320,4 +320,46 @@ onMounted(async () => {
     height: 400px;
   }
 }
+
+@media (max-width: 480px) {
+  .embed-view {
+    padding: var(--spacing-sm);
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .resort-select {
+    max-width: 100%;
+  }
+
+  .preview-widget {
+    max-width: 100%;
+    height: 300px;
+  }
+
+  .preview-fullscreen {
+    height: 350px;
+  }
+}
+
+@media (max-width: 360px) {
+  .preview-widget {
+    height: 250px;
+  }
+
+  .preview-fullscreen {
+    height: 300px;
+  }
+
+  .code-block {
+    padding: var(--spacing-md);
+    font-size: 0.75rem;
+  }
+}
 </style>

@@ -283,4 +283,31 @@ onUnmounted(() => {
 .custom-select-dropdown::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-text-tertiary, #94A3B8);
 }
+
+/* Touch-friendly sizing */
+@media (max-width: 768px) {
+  .custom-select-trigger {
+    min-height: var(--touch-target-min, 44px);
+  }
+
+  .custom-select-option {
+    min-height: var(--touch-target-min, 44px);
+  }
+}
+
+@media (max-width: 360px) {
+  .custom-select-trigger {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+  }
+
+  .custom-select-dropdown {
+    max-height: 240px;
+  }
+
+  .custom-select-option {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+  }
+}
 </style>

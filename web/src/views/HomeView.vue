@@ -293,7 +293,7 @@ onMounted(async () => {
 /* Resorts Grid */
 .resorts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: var(--spacing-lg);
 }
 
@@ -405,6 +405,44 @@ onMounted(async () => {
 
   .sort-controls {
     justify-content: space-between;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-section {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-search-input {
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 40px;
+    font-size: 0.9375rem;
+  }
+
+  .search-icon {
+    left: var(--spacing-sm);
+    width: 18px;
+    height: 18px;
+  }
+
+  .main-section {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .sort-select {
+    width: 140px;
+  }
+
+  .sort-label {
+    font-size: 0.875rem;
   }
 }
 </style>
