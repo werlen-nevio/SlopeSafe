@@ -2,46 +2,26 @@
   <footer class="app-footer">
     <div class="footer-container">
       <div class="footer-content">
-        <div class="footer-brand">
+        <div class="footer-left">
           <router-link to="/" class="footer-logo">
-            <img src="/logo.png" alt="SlopeSafe" class="footer-logo-image" />
+            <img src="/logo_shield.png" alt="SlopeSafe" class="footer-logo-image" />
           </router-link>
-          <p class="brand-description">{{ $t('footer.description') }}</p>
         </div>
 
-        <div class="footer-links">
-          <h4>{{ $t('footer.links') }}</h4>
-          <ul>
-            <li><router-link to="/">{{ $t('nav.home') }}</router-link></li>
-            <li><router-link to="/map">{{ $t('nav.map') }}</router-link></li>
-            <li v-if="isLoggedIn"><router-link to="/favorites">{{ $t('nav.favorites') }}</router-link></li>
-          </ul>
+        <div class="footer-center">
+          <p class="footer-tagline">{{ $t('footer.description') }}</p>
         </div>
 
-        <div class="footer-info">
-          <h4>{{ $t('footer.info') }}</h4>
-          <p class="data-source">
+        <div class="footer-right">
+          <p class="footer-credit">
             {{ $t('footer.dataSource') }}
             <a href="https://www.slf.ch" target="_blank" rel="noopener">SLF</a>
           </p>
-          <p class="update-time" v-if="lastUpdate">
-            {{ $t('footer.lastUpdate') }}: {{ formattedUpdateTime }}
-          </p>
-        </div>
-
-        <div class="footer-contact">
-          <h4>Stay Safe</h4>
-          <p>Real-time avalanche data for Swiss ski resorts. Always check conditions before heading out.</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <div class="footer-bottom-content">
-          <p class="copyright">&copy; {{ currentYear }} SlopeSafe. {{ $t('footer.rights') }}</p>
-          <div class="footer-bottom-links">
-            <span class="made-with">Made with care for skiers</span>
-          </div>
-        </div>
+        <p class="copyright">&copy; {{ currentYear }} SlopeSafe</p>
       </div>
     </div>
   </footer>
@@ -68,173 +48,134 @@ const formattedUpdateTime = computed(() => {
 <style scoped>
 .app-footer {
   background-color: var(--brand-navy);
-  color: #E2E8F0;
+  color: #94A3B8;
   margin-top: auto;
 }
 
 .footer-container {
-  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: var(--spacing-2xl);
-  padding: var(--spacing-3xl) var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xl) 0;
+  gap: var(--spacing-lg);
 }
 
-.footer-brand {
+.footer-left,
+.footer-right {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex: 1;
+}
+
+.footer-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.footer-right {
+  justify-content: flex-end;
 }
 
 .footer-logo {
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .footer-logo-image {
-  height: 48px;
+  height: 36px;
   width: auto;
-  filter: brightness(0) invert(1);
 }
 
-.brand-description {
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: #94A3B8;
-  max-width: 320px;
+.footer-divider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  align-self: center;
 }
 
-.footer-links h4,
-.footer-info h4,
-.footer-contact h4 {
-  color: #FFFFFF;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 var(--spacing-lg) 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.footer-links ul {
-  list-style: none;
-  padding: 0;
+.footer-tagline {
+  font-size: 0.875rem;
+  color: #CBD5E1;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  height: 20px;
+  line-height: 20px;
 }
 
-.footer-links a {
+.footer-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.footer-nav a {
   color: #94A3B8;
   text-decoration: none;
-  font-size: 0.9375rem;
-  transition: all var(--transition-base);
-  display: inline-block;
+  font-size: 0.875rem;
+  transition: color var(--transition-base);
 }
 
-.footer-links a:hover {
+.footer-nav a:hover {
+  color: #FFFFFF;
+}
+
+.footer-credit {
+  font-size: 0.875rem;
+  color: #CBD5E1;
+  margin: 0;
+  height: 20px;
+  line-height: 20px;
+}
+
+.footer-credit a {
   color: var(--brand-sky-blue-light);
-  transform: translateX(4px);
-}
-
-.footer-info p {
-  font-size: 0.9375rem;
-  color: #94A3B8;
-  margin: 0 0 var(--spacing-sm) 0;
-  line-height: 1.6;
-}
-
-.footer-info .data-source a {
-  color: var(--brand-sky-blue-light);
-  font-weight: 500;
   text-decoration: none;
   transition: color var(--transition-base);
 }
 
-.footer-info .data-source a:hover {
+.footer-credit a:hover {
   color: #FFFFFF;
 }
 
-.footer-contact p {
-  font-size: 0.9375rem;
-  color: #94A3B8;
-  line-height: 1.7;
-}
-
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--spacing-lg) var(--spacing-xl);
-}
-
-.footer-bottom-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--spacing-md) 0;
+  text-align: center;
 }
 
 .copyright {
-  font-size: 0.875rem;
-  color: #64748B;
+  font-size: 0.8125rem;
+  color: #94A3B8;
   margin: 0;
 }
 
-.made-with {
-  font-size: 0.875rem;
-  color: #64748B;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .footer-content {
-    grid-template-columns: 1fr 1fr;
-    padding: var(--spacing-2xl) var(--spacing-lg);
-  }
-
-  .footer-brand {
-    grid-column: span 2;
-  }
-}
-
-@media (max-width: 640px) {
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-xl);
-    padding: var(--spacing-xl) var(--spacing-md);
-  }
-
-  .footer-brand {
-    grid-column: span 1;
-    text-align: center;
-    align-items: center;
-  }
-
-  .brand-description {
-    max-width: none;
-  }
-
-  .footer-links,
-  .footer-info,
-  .footer-contact {
-    text-align: center;
-  }
-
-  .footer-links ul {
-    align-items: center;
-  }
-
-  .footer-links a:hover {
-    transform: none;
-  }
-
-  .footer-bottom {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-
-  .footer-bottom-content {
     flex-direction: column;
-    gap: var(--spacing-sm);
-    text-align: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer-divider {
+    display: none;
+  }
+
+  .footer-nav {
+    gap: var(--spacing-md);
   }
 }
 </style>
