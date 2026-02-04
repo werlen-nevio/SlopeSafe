@@ -39,6 +39,7 @@
     "subtitle": "Current avalanche danger levels for the Swiss Alps",
     "searchPlaceholder": "Search for a resort...",
     "sortBy": "Sort by",
+    "sortByDistance": "Nearby",
     "sortByName": "Name",
     "sortByDanger": "Danger Level",
     "sortByCanton": "Canton",

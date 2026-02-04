@@ -34,6 +34,7 @@
           <div class="sort-controls">
             <label class="sort-label">{{ $t('home.sortBy') }}:</label>
             <select v-model="sortBy" @change="handleSort" class="sort-select">
+              <option value="distance">{{ $t('home.sortByDistance') }}</option>
               <option value="name">{{ $t('home.sortByName') }}</option>
               <option value="danger">{{ $t('home.sortByDanger') }}</option>
               <option value="canton">{{ $t('home.sortByCanton') }}</option>
@@ -84,16 +85,47 @@ const { t } = useI18n();
 const resortsStore = useResortsStore();
 
 const searchQuery = ref('');
-const sortBy = ref('name');
+const sortBy = ref('distance');
+const userLocation = ref(null);
 const loading = computed(() => resortsStore.loading);
 const error = computed(() => resortsStore.error);
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
 
 const displayResorts = computed(() => {
   let resorts = searchQuery.value
     ? resortsStore.searchResults
     : resortsStore.allResorts;
 
-  if (sortBy.value === 'danger') {
+  if (sortBy.value === 'distance' && userLocation.value) {
+    resorts = [...resorts].sort((a, b) => {
+      const distA = calculateDistance(
+        userLocation.value.lat,
+        userLocation.value.lng,
+        a.coordinates?.lat || 0,
+        a.coordinates?.lng || 0
+      );
+      const distB = calculateDistance(
+        userLocation.value.lat,
+        userLocation.value.lng,
+        b.coordinates?.lat || 0,
+        b.coordinates?.lng || 0
+      );
+      return distA - distB;
+    });
+  } else if (sortBy.value === 'distance' && !userLocation.value) {
+    resorts = [...resorts].sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy.value === 'danger') {
     resorts = [...resorts].sort((a, b) => (b.danger_level || 0) - (a.danger_level || 0));
   } else if (sortBy.value === 'name') {
     resorts = [...resorts].sort((a, b) => a.name.localeCompare(b.name));
@@ -116,7 +148,26 @@ const handleSort = () => {
   // Sorting is handled by the computed property
 };
 
+const getUserLocation = () => {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        userLocation.value = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      },
+      () => {
+        sortBy.value = 'name';
+      }
+    );
+  } else {
+    sortBy.value = 'name';
+  }
+};
+
 onMounted(async () => {
+  getUserLocation();
   await resortsStore.fetchResorts();
 });
 </script>
