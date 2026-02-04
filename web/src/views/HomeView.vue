@@ -21,10 +21,6 @@
           </div>
         </div>
       </div>
-      <div class="hero-decoration">
-        <div class="hero-shape hero-shape-1"></div>
-        <div class="hero-shape hero-shape-2"></div>
-      </div>
     </section>
 
     <!-- Main Content -->
@@ -188,7 +184,8 @@ onMounted(async () => {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-light) 100%);
+  background: linear-gradient(169deg, rgba(26, 54, 93, 0.85) 0%, rgba(42, 72, 100, 0.85) 100%),
+              url('/back.png') center/cover no-repeat;
   padding: var(--spacing-3xl) var(--spacing-xl);
   position: relative;
   overflow: hidden;
@@ -256,33 +253,6 @@ onMounted(async () => {
 .hero-search-input:focus {
   outline: none;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(91, 164, 212, 0.3);
-}
-
-.hero-decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-shape {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.hero-shape-1 {
-  width: 400px;
-  height: 400px;
-  top: -200px;
-  right: -100px;
-}
-
-.hero-shape-2 {
-  width: 300px;
-  height: 300px;
-  bottom: -150px;
-  left: -50px;
 }
 
 /* Main Section */
