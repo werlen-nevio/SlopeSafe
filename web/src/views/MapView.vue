@@ -22,15 +22,6 @@
         </div>
       </div>
 
-      <!-- Map Controls -->
-      <div v-if="!loading" class="map-controls">
-        <button
-          @click="toggleDangerLayer"
-          :class="['map-control-btn', { active: showDangerLayer }]"
-        >
-          {{ showDangerLayer ? $t('map.hideDanger', 'Hide Danger Zones') : $t('map.showDanger', 'Show Danger Zones') }}
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -47,7 +38,6 @@ const router = useRouter();
 const mapContainer = ref(null);
 const loading = ref(true);
 const error = ref(null);
-const showDangerLayer = ref(false);
 
 let map = null;
 let resorts = [];
@@ -104,11 +94,11 @@ const initializeMap = async () => {
     // Wait for map to load
     await new Promise((resolve) => map.on('load', resolve));
 
-    // Fetch and add resort markers
-    await loadResorts();
-
-    // Fetch danger layer data
+    // Fetch danger layer first (renders below markers)
     await loadDangerLayer();
+
+    // Fetch and add resort markers (renders on top)
+    await loadResorts();
 
     loading.value = false;
   } catch (err) {
@@ -123,22 +113,85 @@ const loadResorts = async () => {
     const response = await api.map.getResorts();
     resorts = response.resorts || [];
 
-    // Add markers for each resort
-    resorts.forEach(resort => {
-      if (resort.coordinates) {
-        const markerEl = document.createElement('div');
-        markerEl.className = `resort-marker danger-${resort.danger_level || 0}`;
-        markerEl.textContent = resort.danger_level || '?';
+    // Create GeoJSON FeatureCollection for all resorts
+    const resortsGeoJson = {
+      type: 'FeatureCollection',
+      features: resorts
+        .filter(resort => resort.coordinates)
+        .map(resort => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [resort.coordinates.lng, resort.coordinates.lat]
+          },
+          properties: {
+            name: resort.name,
+            slug: resort.slug,
+            danger_level: resort.danger_level
+          }
+        }))
+    };
 
-        const marker = new maplibregl.Marker({ element: markerEl })
-          .setLngLat([resort.coordinates.lng, resort.coordinates.lat])
-          .setPopup(createPopup(resort))
+    // Add resorts as a GeoJSON source
+    map.addSource('resorts', {
+      type: 'geojson',
+      data: resortsGeoJson
+    });
+
+    // Add circle layer for resort markers (same style as MiniMap)
+    map.addLayer({
+      id: 'resort-markers',
+      type: 'circle',
+      source: 'resorts',
+      paint: {
+        'circle-radius': 8,
+        'circle-color': '#1e3a5f',
+        'circle-stroke-width': 3,
+        'circle-stroke-color': '#ffffff'
+      }
+    });
+
+    // Add click handler for resort markers
+    map.on('click', 'resort-markers', (e) => {
+      const feature = e.features[0];
+      if (feature) {
+        router.push(`/resorts/${feature.properties.slug}`);
+      }
+    });
+
+    // Show popup on hover
+    map.on('mouseenter', 'resort-markers', (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      const feature = e.features[0];
+      if (feature) {
+        const popup = new maplibregl.Popup({
+          offset: 15,
+          closeButton: false,
+          closeOnClick: false
+        })
+          .setLngLat(feature.geometry.coordinates)
+          .setHTML(`
+            <div class="map-popup">
+              <h3>${feature.properties.name}</h3>
+              <div class="map-popup-content">
+                <div class="map-popup-row">
+                  <span class="map-popup-label">${t('danger.level')}:</span>
+                  <span class="map-popup-value">${feature.properties.danger_level || '-'}</span>
+                </div>
+              </div>
+            </div>
+          `)
           .addTo(map);
 
-        // Add click handler
-        markerEl.addEventListener('click', () => {
-          router.push(`/resorts/${resort.slug}`);
-        });
+        map._currentPopup = popup;
+      }
+    });
+
+    map.on('mouseleave', 'resort-markers', () => {
+      map.getCanvas().style.cursor = '';
+      if (map._currentPopup) {
+        map._currentPopup.remove();
+        map._currentPopup = null;
       }
     });
   } catch (err) {
@@ -146,64 +199,23 @@ const loadResorts = async () => {
   }
 };
 
-const createPopup = (resort) => {
-  const popupContent = `
-    <div class="map-popup">
-      <h3>${resort.name}</h3>
-      <div class="map-popup-content">
-        <div class="map-popup-row">
-          <span class="map-popup-label">${t('danger.level')}:</span>
-          <span class="map-popup-value">${resort.danger_level || '-'}</span>
-        </div>
-      </div>
-      <div class="map-popup-link">
-        <a href="/resorts/${resort.slug}">${t('common.viewDetails', 'View Details')}</a>
-      </div>
-    </div>
-  `;
-
-  return new maplibregl.Popup({
-    offset: 25,
-    closeButton: true,
-    closeOnClick: false
-  }).setHTML(popupContent);
-};
-
 const loadDangerLayer = async () => {
   try {
     const response = await api.map.getDangerLayer();
     dangerLayerData = response;
-  } catch (err) {
-    console.error('Failed to load danger layer:', err);
-  }
-};
 
-const toggleDangerLayer = () => {
-  if (!map || !dangerLayerData) return;
-
-  if (showDangerLayer.value) {
-    // Remove danger layer
-    if (map.getLayer('danger-layer')) {
-      map.removeLayer('danger-layer');
-    }
-    if (map.getSource('danger-source')) {
-      map.removeSource('danger-source');
-    }
-    showDangerLayer.value = false;
-  } else {
-    // Add danger layer
-    if (!map.getSource('danger-source')) {
+    // Show danger layer by default
+    if (dangerLayerData && map) {
       map.addSource('danger-source', {
         type: 'geojson',
         data: dangerLayerData
       });
-    }
 
-    if (!map.getLayer('danger-layer')) {
       map.addLayer({
-        id: 'danger-layer',
+        id: 'danger-fill',
         type: 'fill',
         source: 'danger-source',
+        filter: ['>=', ['get', 'danger_level'], 1],
         paint: {
           'fill-color': [
             'match',
@@ -213,14 +225,35 @@ const toggleDangerLayer = () => {
             3, '#ff9900',
             4, '#ff0000',
             5, '#9d0000',
-            '#cccccc' // default
+            'transparent'
           ],
           'fill-opacity': 0.4
         }
-      }, 'osm'); // Add below OSM layer
-    }
+      });
 
-    showDangerLayer.value = true;
+      map.addLayer({
+        id: 'danger-outline',
+        type: 'line',
+        source: 'danger-source',
+        filter: ['>=', ['get', 'danger_level'], 1],
+        paint: {
+          'line-color': [
+            'match',
+            ['get', 'danger_level'],
+            1, '#ccff66',
+            2, '#ffff00',
+            3, '#ff9900',
+            4, '#ff0000',
+            5, '#9d0000',
+            'transparent'
+          ],
+          'line-width': 2,
+          'line-opacity': 0.8
+        }
+      });
+    }
+  } catch (err) {
+    console.error('Failed to load danger layer:', err);
   }
 };
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bulletin;
+use App\Models\ResortStatus;
 use App\Models\SkiResort;
 use Illuminate\Http\Request;
 
@@ -50,12 +51,39 @@ class MapController extends Controller
 
         if (!$bulletin) {
             return response()->json([
-                'success' => false,
-                'message' => 'No bulletin available',
-            ], 404);
+                'type' => 'FeatureCollection',
+                'features' => [],
+            ]);
         }
 
-        // Return the raw GeoJSON data for map overlay
-        return response()->json($bulletin->raw_data);
+        // Get all warning regions for this bulletin with their danger levels
+        $warningRegions = $bulletin->warningRegions()->get();
+
+        $features = [];
+        foreach ($warningRegions as $region) {
+            if (!$region->geometry) {
+                continue;
+            }
+
+            // Get the max danger level for this region from resort statuses
+            $dangerLevel = ResortStatus::where('warning_region_id', $region->id)
+                ->where('bulletin_id', $bulletin->id)
+                ->max('danger_level_max') ?? 0;
+
+            $features[] = [
+                'type' => 'Feature',
+                'geometry' => $region->geometry,
+                'properties' => [
+                    'id' => $region->id,
+                    'name' => $region->name,
+                    'danger_level' => $dangerLevel,
+                ],
+            ];
+        }
+
+        return response()->json([
+            'type' => 'FeatureCollection',
+            'features' => $features,
+        ]);
     }
 }
