@@ -15,14 +15,17 @@
           </div>
           <h3 class="resort-name">{{ resort.name }}</h3>
         </div>
-        <button
-          v-if="showFavorite && isLoggedIn"
-          @click.prevent="toggleFavorite"
-          :class="['favorite-btn', { active: isFavorited }]"
-          :title="isFavorited ? $t('favorites.remove') : $t('favorites.add')"
-        >
-          <span class="favorite-icon">{{ isFavorited ? '★' : '☆' }}</span>
-        </button>
+        <div class="header-right">
+          <DangerLevelBadge :level="resort.danger_level" :showText="false" />
+          <button
+            v-if="showFavorite && isLoggedIn"
+            @click.prevent="toggleFavorite"
+            :class="['favorite-btn', { active: isFavorited }]"
+            :title="isFavorited ? $t('favorites.remove') : $t('favorites.add')"
+          >
+            <span class="favorite-icon">{{ isFavorited ? '★' : '☆' }}</span>
+          </button>
+        </div>
       </div>
 
       <div class="card-body">
@@ -35,10 +38,6 @@
             <span class="label">{{ $t('resort.elevation') }}:</span>
             <span class="value">{{ resort.elevation?.min || resort.elevation_min }}m - {{ resort.elevation?.max || resort.elevation_max }}m</span>
           </div>
-        </div>
-
-        <div class="danger-level-section">
-          <DangerLevelBadge :level="resort.danger_level" />
         </div>
 
         <div v-if="resort.last_updated" class="last-updated">
@@ -169,6 +168,12 @@ const formatDate = (dateString) => {
   white-space: nowrap;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 .resort-card:hover .resort-name {
   color: var(--color-primary);
 }
@@ -232,15 +237,6 @@ const formatDate = (dateString) => {
 .value {
   color: var(--color-text-primary);
   font-weight: 500;
-}
-
-.danger-level-section {
-  margin: var(--spacing-md) 0;
-  display: flex;
-  justify-content: center;
-  padding: var(--spacing-md);
-  background: var(--color-background-secondary);
-  border-radius: var(--radius-md);
 }
 
 .last-updated {
