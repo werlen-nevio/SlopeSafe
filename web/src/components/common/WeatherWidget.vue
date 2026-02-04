@@ -62,7 +62,7 @@
           </div>
 
           <div v-if="weatherData.current.wind_speed_kmh !== null" class="detail-item">
-            <span class="detail-icon">💨</span>
+            <span class="detail-icon"> </span>
             <div class="detail-text">
               <span class="detail-label">{{ $t('weather.wind', 'Wind') }}</span>
               <span class="detail-value">{{ Math.round(weatherData.current.wind_speed_kmh) }} km/h</span>
@@ -70,7 +70,7 @@
           </div>
 
           <div v-if="weatherData.current.visibility_km !== null" class="detail-item">
-            <span class="detail-icon">👁️</span>
+            <span class="detail-icon"> </span>
             <div class="detail-text">
               <span class="detail-label">{{ $t('weather.visibility', 'Visibility') }}</span>
               <span class="detail-value">{{ Math.round(weatherData.current.visibility_km) }} km</span>
