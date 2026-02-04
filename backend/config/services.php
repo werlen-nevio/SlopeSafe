@@ -36,4 +36,8 @@ return [
         'api_url' => env('WEATHER_API_URL', 'https://api.openweathermap.org/data/2.5'),
     ],
 
+    'logo_dev' => [
+        'token' => env('LOGO_DEV_TOKEN'),
+    ],
+
 ];

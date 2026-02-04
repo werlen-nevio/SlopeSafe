@@ -2,7 +2,19 @@
   <div class="resort-card">
     <router-link :to="`/resorts/${resort.slug}`" class="card-link">
       <div class="card-header">
-        <h3 class="resort-name">{{ resort.name }}</h3>
+        <div class="resort-identity">
+          <div class="resort-logo">
+            <img
+              v-if="resort.logo_url && !logoError"
+              :src="resort.logo_url"
+              :alt="resort.name"
+              class="logo-image"
+              @error="onLogoError"
+            />
+            <span v-else class="logo-fallback">{{ resortInitial }}</span>
+          </div>
+          <h3 class="resort-name">{{ resort.name }}</h3>
+        </div>
         <button
           v-if="showFavorite && isLoggedIn"
           @click.prevent="toggleFavorite"
@@ -38,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import { useFavoritesStore } from '@/stores/favorites';
@@ -61,6 +73,12 @@ const favoritesStore = useFavoritesStore();
 
 const isLoggedIn = computed(() => authStore.isLoggedIn);
 const isFavorited = computed(() => favoritesStore.isFavorite(props.resort.id));
+const resortInitial = computed(() => props.resort.name?.charAt(0).toUpperCase() || '?');
+const logoError = ref(false);
+
+const onLogoError = () => {
+  logoError.value = true;
+};
 
 const toggleFavorite = async () => {
   try {
@@ -108,12 +126,47 @@ const formatDate = (dateString) => {
   background: var(--color-background-secondary);
 }
 
+.resort-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.resort-logo {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-fallback {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
 .resort-name {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
   transition: color var(--transition-base);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .resort-card:hover .resort-name {
@@ -206,6 +259,15 @@ const formatDate = (dateString) => {
 
   .card-body {
     padding: var(--spacing-md);
+  }
+
+  .resort-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-fallback {
+    font-size: 1rem;
   }
 
   .resort-name {

@@ -20,6 +20,7 @@ class SkiResort extends Model
         'elevation_max',
         'canton',
         'website_url',
+        'logo_path',
     ];
 
     protected $casts = [
@@ -88,5 +89,17 @@ class SkiResort extends Model
     public function latestWeatherData()
     {
         return $this->currentWeather();
+    }
+
+    /**
+     * Get the full URL for the resort logo.
+     */
+    public function getLogoUrlAttribute(): ?string
+    {
+        if (!$this->logo_path) {
+            return null;
+        }
+
+        return asset('storage/' . $this->logo_path);
     }
 }

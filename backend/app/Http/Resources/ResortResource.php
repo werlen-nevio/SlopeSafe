@@ -31,6 +31,7 @@ class ResortResource extends JsonResource
             ],
             'danger_level' => $currentStatus?->danger_level_max ?? null,
             'website_url' => $this->website_url,
+            'logo_url' => $this->logo_url,
         ];
     }
 }

@@ -28,6 +28,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('alerts:send-reminders')
             ->everyMinute()
             ->withoutOverlapping();
+
+        // Refresh resort logos weekly (Sunday at 3:00 AM)
+        $schedule->command('resorts:fetch-logos --force')
+            ->weeklyOn(0, '3:00')
+            ->withoutOverlapping()
+            ->runInBackground();
     }
 
     /**
