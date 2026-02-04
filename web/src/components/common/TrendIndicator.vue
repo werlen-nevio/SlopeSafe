@@ -93,11 +93,6 @@ const getTrendLabel = () => {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-[data-theme="dark"] .trend-increasing {
-  background-color: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-}
-
 /* Trend: Decreasing (Good) */
 .trend-decreasing {
   background-color: rgba(16, 185, 129, 0.1);
@@ -105,21 +100,11 @@ const getTrendLabel = () => {
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-[data-theme="dark"] .trend-decreasing {
-  background-color: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-}
-
 /* Trend: Stable */
 .trend-stable {
   background-color: rgba(107, 114, 128, 0.1);
   color: #4b5563;
   border: 1px solid rgba(107, 114, 128, 0.2);
-}
-
-[data-theme="dark"] .trend-stable {
-  background-color: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
 }
 
 /* Animation */

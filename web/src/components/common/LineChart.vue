@@ -164,45 +164,6 @@ watch(
   { deep: true }
 );
 
-// Watch for theme changes and update chart colors
-const updateChartColors = () => {
-  if (!chartInstance) return;
-
-  const chartText = getComputedStyle(document.documentElement)
-    .getPropertyValue('--chart-text').trim();
-  const chartGrid = getComputedStyle(document.documentElement)
-    .getPropertyValue('--chart-grid').trim();
-
-  chartInstance.options.plugins.legend.labels.color = chartText;
-  chartInstance.options.scales.x.ticks.color = chartText;
-  chartInstance.options.scales.y.ticks.color = chartText;
-  chartInstance.options.scales.x.grid.color = chartGrid;
-  chartInstance.options.scales.y.grid.color = chartGrid;
-
-  chartInstance.update();
-};
-
-// Listen for theme changes
-if (typeof window !== 'undefined') {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.attributeName === 'data-theme') {
-        setTimeout(updateChartColors, 50);
-      }
-    });
-  });
-
-  onMounted(() => {
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-  });
-
-  onBeforeUnmount(() => {
-    observer.disconnect();
-  });
-}
 </script>
 
 <style scoped>

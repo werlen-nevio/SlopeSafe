@@ -22,8 +22,6 @@
         </nav>
 
         <div class="header-actions">
-          <ThemeToggle />
-
           <select
             v-model="currentLocale"
             @change="changeLanguage"
@@ -71,7 +69,6 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import ThemeToggle from './ThemeToggle.vue';
 
 const { locale, t } = useI18n();
 const router = useRouter();
