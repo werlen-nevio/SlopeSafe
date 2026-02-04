@@ -65,10 +65,10 @@ const dangerText = computed(() => {
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .danger-name {
@@ -78,32 +78,32 @@ const dangerText = computed(() => {
 
 /* Danger Level 1 - Low */
 .danger-1 {
-  background-color: #e8f5e9;
-  color: #2e7d32;
+  background-color: #4caf50;
+  color: #fff;
 }
 
 /* Danger Level 2 - Moderate */
 .danger-2 {
-  background-color: #fff8e1;
-  color: #f57f17;
+  background-color: #ffeb3b;
+  color: #333;
 }
 
 /* Danger Level 3 - Considerable */
 .danger-3 {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: #ff9800;
+  color: #fff;
 }
 
 /* Danger Level 4 - High */
 .danger-4 {
-  background-color: #ffebee;
-  color: #c62828;
+  background-color: #f44336;
+  color: #fff;
 }
 
 /* Danger Level 5 - Very High */
 .danger-5 {
-  background-color: #fce4ec;
-  color: #ad1457;
+  background-color: #b71c1c;
+  color: #fff;
 }
 
 /* Unknown */

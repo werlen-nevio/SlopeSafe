@@ -74,6 +74,40 @@
             </div>
           </div>
 
+          <div v-if="resort.current_status?.avalanche_problems?.length" class="info-card avalanche-problems-card">
+            <h2>{{ $t('resort.avalancheProblems') }}</h2>
+            <div class="problems-list">
+              <div
+                v-for="(problem, index) in resort.current_status.avalanche_problems"
+                :key="index"
+                class="problem-card"
+              >
+                <div class="problem-content">
+                  <div class="problem-info">
+                    <div class="problem-header">
+                      <span class="problem-type">{{ formatProblemType(problem.type) }}</span>
+                    </div>
+                    <div class="problem-elevation">
+                      {{ formatElevation(problem.elevation_lower, problem.elevation_upper) }}
+                    </div>
+                  </div>
+                  <div class="problem-compass">
+                    <span class="compass-label">{{ $t('resort.aspects') }}</span>
+                    <AspectCompass :aspects="problem.aspects" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="weather-section">
+            <WeatherWidget
+              :weather-data="weatherData"
+              :loading="weatherLoading"
+              :error="weatherError"
+            />
+          </div>
+
           <div class="info-card">
             <h2>{{ $t('resort.info') }}</h2>
             <div class="detail-row">
@@ -101,14 +135,6 @@
             />
           </div>
 
-          <div class="weather-section">
-            <WeatherWidget
-              :weather-data="weatherData"
-              :loading="weatherLoading"
-              :error="weatherError"
-            />
-          </div>
-
           <div class="historical-section">
             <HistoricalTimeline
               :history="historicalData"
@@ -116,32 +142,6 @@
               :error="historicalError"
               @update:days="handleDaysChange"
             />
-          </div>
-
-          <div v-if="resort.current_status?.avalanche_problems?.length" class="info-card avalanche-problems-card">
-            <h2>{{ $t('resort.avalancheProblems') }}</h2>
-            <div class="problems-list">
-              <div
-                v-for="(problem, index) in resort.current_status.avalanche_problems"
-                :key="index"
-                class="problem-card"
-              >
-                <div class="problem-content">
-                  <div class="problem-info">
-                    <div class="problem-header">
-                      <span class="problem-type">{{ formatProblemType(problem.type) }}</span>
-                    </div>
-                    <div class="problem-elevation">
-                      {{ formatElevation(problem.elevation_lower, problem.elevation_upper) }}
-                    </div>
-                  </div>
-                  <div class="problem-compass">
-                    <span class="compass-label">{{ $t('resort.aspects') }}</span>
-                    <AspectCompass :aspects="problem.aspects" />
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div v-if="resort.last_updated" class="last-updated">
@@ -258,9 +258,9 @@ onMounted(async () => {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-lg);
 }
 
 .loading,
@@ -396,20 +396,11 @@ onMounted(async () => {
   .detail-content {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .info-card:first-child {
-    grid-column: 1 / -1;
-  }
 }
 
-.weather-section {
-  grid-column: 1 / -1;
-  margin: var(--spacing-md) 0;
-}
-
+.weather-section,
 .historical-section {
   grid-column: 1 / -1;
-  margin: var(--spacing-md) 0;
 }
 
 .info-card {
@@ -448,10 +439,21 @@ onMounted(async () => {
 .danger-display {
   display: flex;
   justify-content: center;
-  margin: var(--spacing-xl) 0;
-  padding: var(--spacing-lg);
-  background: var(--color-background-secondary);
+  margin: var(--spacing-md) 0;
+}
+
+.danger-display :deep(.danger-badge) {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
   border-radius: var(--radius-lg);
+  font-weight: 600;
+}
+
+.danger-display :deep(.danger-level) {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .status-details {
@@ -498,15 +500,12 @@ onMounted(async () => {
   gap: var(--spacing-sm);
 }
 
-.avalanche-problems-card {
-  grid-column: 1 / -1;
-}
-
 .problems-list {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
+
 
 .problem-card {
   background: var(--color-background-secondary);
@@ -564,6 +563,7 @@ onMounted(async () => {
 }
 
 .last-updated {
+  grid-column: 1 / -1;
   text-align: center;
   color: var(--color-text-tertiary);
   font-size: 0.875rem;
@@ -579,12 +579,16 @@ onMounted(async () => {
     padding: var(--spacing-md) 0;
   }
 
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
   .detail-header {
     padding: var(--spacing-lg);
   }
 
   .detail-header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 
   .resort-meta {
@@ -604,22 +608,57 @@ onMounted(async () => {
   }
 
   .info-card {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 
   .info-card h2 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .detail-content {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .problem-card {
+    padding: var(--spacing-md);
+  }
+
+  .problem-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .problem-compass {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .last-updated {
+    grid-column: 1 / -1;
   }
 }
 
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
   .container {
-    max-width: 720px;
+    max-width: 100%;
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+    padding: 0 var(--spacing-2xl);
+  }
+
+  .detail-header h1 {
+    font-size: 2.75rem;
   }
 }
 </style>
