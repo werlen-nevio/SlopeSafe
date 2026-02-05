@@ -108,6 +108,61 @@ class BulletinSyncService
     }
 
     /**
+     * Sync a historical bulletin for a specific date (no notifications).
+     *
+     * @param string $dateTime ISO 8601 datetime
+     * @param string $language
+     * @return array
+     */
+    public function syncBulletinForDate(string $dateTime, string $language = 'de'): array
+    {
+        $results = [
+            'success' => false,
+            'bulletin_id' => null,
+            'regions_processed' => 0,
+            'resorts_updated' => 0,
+            'errors' => [],
+        ];
+
+        try {
+            $bulletinData = $this->slfApi->fetchBulletinByDate($dateTime, $language);
+
+            if (!$bulletinData) {
+                $results['errors'][] = "No bulletin found for {$dateTime}";
+                return $results;
+            }
+
+            $bulletin = $this->storeBulletin($bulletinData, $language);
+
+            if (!$bulletin) {
+                $results['errors'][] = 'Failed to store bulletin';
+                return $results;
+            }
+
+            $results['bulletin_id'] = $bulletin->id;
+            $results['regions_processed'] = $this->processWarningRegions($bulletin);
+            $results['resorts_updated'] = $this->updateResortStatuses($bulletin);
+
+            // Backdate resort_statuses to the bulletin's valid_from time
+            ResortStatus::where('bulletin_id', $bulletin->id)
+                ->update([
+                    'created_at' => $bulletin->valid_from,
+                    'updated_at' => $bulletin->valid_from,
+                ]);
+
+            $results['success'] = true;
+        } catch (\Exception $e) {
+            Log::error('Historical bulletin sync failed', [
+                'dateTime' => $dateTime,
+                'error' => $e->getMessage(),
+            ]);
+            $results['errors'][] = $e->getMessage();
+        }
+
+        return $results;
+    }
+
+    /**
      * Store bulletin data in the database.
      *
      * @param array $bulletinData
@@ -117,8 +172,10 @@ class BulletinSyncService
     protected function storeBulletin(array $bulletinData, string $language): ?Bulletin
     {
         try {
-            // Extract bulletin metadata
-            $bulletinId = $bulletinData['id'] ?? uniqid('slf_');
+            // Extract bulletin metadata — try top-level id, then first feature's bulletinID
+            $bulletinId = $bulletinData['id']
+                ?? $bulletinData['features'][0]['properties']['bulletinID'] ?? null
+                ?? uniqid('slf_');
             $validFrom = $this->extractValidityTime($bulletinData, 'validFrom');
             $validUntil = $this->extractValidityTime($bulletinData, 'validUntil');
 
@@ -167,7 +224,17 @@ class BulletinSyncService
      */
     protected function extractValidityTime(array $bulletinData, string $field): Carbon
     {
+        // Try direct top-level field (validFrom / validUntil)
         $timeString = $bulletinData[$field] ?? $bulletinData['properties'][$field] ?? null;
+
+        // Try SLF v4 CAAML format: features[0].properties.validTime.startTime/endTime
+        if (!$timeString && !empty($bulletinData['features'])) {
+            $validTime = $bulletinData['features'][0]['properties']['validTime'] ?? null;
+            if ($validTime) {
+                $mappedField = $field === 'validFrom' ? 'startTime' : 'endTime';
+                $timeString = $validTime[$mappedField] ?? null;
+            }
+        }
 
         if ($timeString) {
             try {

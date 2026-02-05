@@ -144,6 +144,49 @@ class SlfApiService
     }
 
     /**
+     * Fetch the bulletin active at a specific date/time.
+     *
+     * @param string $dateTime ISO 8601 datetime (e.g. 2026-02-03T12:00:00+01:00)
+     * @param string $lang Language code (de, fr, it, en)
+     * @return array|null
+     */
+    public function fetchBulletinByDate(string $dateTime, string $lang = 'de'): ?array
+    {
+        $endpoint = str_replace('{lang}', $lang, config('slf.endpoints.bulletin'));
+        $endpoint .= '?' . http_build_query(['activeAt' => $dateTime]);
+
+        try {
+            $response = $this->makeRequest('GET', $endpoint);
+
+            if ($response && isset($response['type']) && $response['type'] === 'FeatureCollection') {
+                $featuresCount = count($response['features'] ?? []);
+
+                if ($featuresCount === 0) {
+                    Log::info('No active bulletin found for date', ['dateTime' => $dateTime]);
+                    return null;
+                }
+
+                Log::info('SLF historical bulletin fetched', [
+                    'dateTime' => $dateTime,
+                    'language' => $lang,
+                    'features_count' => $featuresCount,
+                ]);
+                return $response;
+            }
+
+            Log::warning('Invalid historical bulletin response', ['dateTime' => $dateTime]);
+            return null;
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch historical SLF bulletin', [
+                'dateTime' => $dateTime,
+                'language' => $lang,
+                'error' => $e->getMessage(),
+            ]);
+            return null;
+        }
+    }
+
+    /**
      * Test connection to SLF API.
      *
      * @return bool
