@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.slopesafe.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "SlopeSafe uses your location to sort ski resorts by distance.",
-        "NSLocationAlwaysUsageDescription": "SlopeSafe uses your location to provide nearby resort alerts."
+        "NSLocationAlwaysUsageDescription": "SlopeSafe uses your location to provide nearby resort alerts.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
