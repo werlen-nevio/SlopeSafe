@@ -7,7 +7,7 @@ export const favoritesApi = {
   },
 
   async add(resortId) {
-    const response = await apiClient.post('/favorites', { ski_resort_id: resortId });
+    const response = await apiClient.post('/favorites', { resort_id: resortId });
     return response.data;
   },
 

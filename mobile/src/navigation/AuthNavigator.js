@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { theme } from '../theme';
 
-// Import auth screens (will be created next)
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 
@@ -12,23 +12,24 @@ const AuthNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#2563eb'
+          backgroundColor: theme.colors.brandNavy,
         },
-        headerTintColor: '#fff',
+        headerTintColor: theme.colors.brandWhite,
         headerTitleStyle: {
-          fontWeight: 'bold'
-        }
+          fontFamily: 'Inter_600SemiBold',
+        },
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ title: 'Login' }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{ title: 'Register' }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

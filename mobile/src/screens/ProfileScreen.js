@@ -1,28 +1,36 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { theme } from '../theme';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const handleLogout = () => {
     Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
+      t('auth.logout'),
+      t('auth.logoutConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: logout
-        }
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('auth.logout'), style: 'destructive', onPress: logout },
       ]
     );
   };
 
+  const menuItems = [
+    { icon: 'notifications-outline', label: t('profile.alertRules'), screen: 'AlertRules' },
+    { icon: 'time-outline', label: t('profile.notificationHistory'), screen: 'NotificationHistory' },
+    { icon: 'language-outline', label: t('profile.language'), screen: 'LanguagePicker' },
+  ];
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{user?.name?.charAt(0)?.toUpperCase() || '?'}</Text>
         </View>
@@ -31,24 +39,36 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Notification Settings</Text>
-          <Text style={styles.menuArrow}>›</Text>
-        </TouchableOpacity>
+        {menuItems.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[styles.menuItem, index < menuItems.length - 1 && styles.menuItemBorder]}
+            onPress={() => navigation.navigate(item.screen)}
+            accessibilityRole="button"
+            accessibilityLabel={item.label}
+          >
+            <View style={styles.menuLeft}>
+              <Ionicons name={item.icon} size={20} color={theme.colors.textSecondary} />
+              <Text style={styles.menuText}>{item.label}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={theme.colors.textTertiary} />
+          </TouchableOpacity>
+        ))}
+      </View>
 
+      <View style={styles.section}>
         <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Language</Text>
-          <Text style={styles.menuArrow}>›</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>About</Text>
-          <Text style={styles.menuArrow}>›</Text>
+          <View style={styles.menuLeft}>
+            <Ionicons name="information-circle-outline" size={20} color={theme.colors.textSecondary} />
+            <Text style={styles.menuText}>{t('profile.about')}</Text>
+          </View>
+          <Text style={styles.versionText}>v1.0.0</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityRole="button" accessibilityLabel={t('auth.logout')}>
+        <Ionicons name="log-out-outline" size={20} color={theme.colors.brandWhite} />
+        <Text style={styles.logoutText}>{t('auth.logout')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -57,74 +77,88 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb'
+    backgroundColor: theme.colors.backgroundSecondary,
   },
   header: {
-    backgroundColor: '#ffffff',
-    padding: 32,
+    backgroundColor: theme.colors.brandNavy,
+    paddingHorizontal: 28,
+    paddingBottom: 28,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb'
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#2563eb',
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: theme.colors.brandSkyBlue,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16
+    marginBottom: 12,
   },
   avatarText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#ffffff'
+    fontSize: 30,
+    fontFamily: 'Inter_700Bold',
+    color: theme.colors.brandWhite,
   },
   name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginBottom: 4
+    fontSize: theme.typography.sizes.xl,
+    fontFamily: 'Inter_700Bold',
+    color: theme.colors.brandWhite,
+    marginBottom: 4,
   },
   email: {
-    fontSize: 14,
-    color: '#6b7280'
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.brandSkyBlueLight,
   },
   section: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.brandWhite,
     marginTop: 16,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#e5e7eb'
+    marginHorizontal: 16,
+    borderRadius: theme.borderRadius.lg,
+    ...theme.shadows.card,
   },
   menuItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
+  },
+  menuItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6'
+    borderBottomColor: theme.colors.borderLight,
+  },
+  menuLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   menuText: {
-    fontSize: 16,
-    color: '#1f2937'
+    fontSize: theme.typography.sizes.base,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textPrimary,
   },
-  menuArrow: {
-    fontSize: 24,
-    color: '#9ca3af'
+  versionText: {
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textTertiary,
   },
   logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     margin: 16,
     padding: 16,
-    backgroundColor: '#ef4444',
-    borderRadius: 8,
-    alignItems: 'center'
+    backgroundColor: theme.colors.danger,
+    borderRadius: theme.borderRadius.lg,
   },
   logoutText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600'
-  }
+    color: theme.colors.brandWhite,
+    fontSize: theme.typography.sizes.base,
+    fontFamily: 'Inter_600SemiBold',
+  },
 });
 
 export default ProfileScreen;

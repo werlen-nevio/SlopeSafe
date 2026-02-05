@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "SlopeSafe",
+    "slug": "slopesafe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,20 +10,60 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1B3B5F"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.slopesafe.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "SlopeSafe uses your location to sort ski resorts by distance.",
+        "NSLocationAlwaysUsageDescription": "SlopeSafe uses your location to provide nearby resort alerts."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1B3B5F"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.slopesafe.app",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-localization",
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "SlopeSafe uses your location to sort ski resorts by distance."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#1B3B5F",
+          "sounds": [],
+          "androidMode": "default",
+          "androidCollapsedTitle": "SlopeSafe Alerts"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c85c2863-844d-463e-86ed-b02ad8bddd56"
+      }
+    },
+    "owner": "nwerlen"
   }
 }

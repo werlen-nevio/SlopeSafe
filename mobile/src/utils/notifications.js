@@ -1,4 +1,5 @@
 import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { authApi } from '../api';
 
@@ -28,7 +29,8 @@ export const registerForPushNotifications = async () => {
     }
 
     // Get the Expo push token
-    const token = await Notifications.getExpoPushTokenAsync();
+    const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+    const token = await Notifications.getExpoPushTokenAsync({ projectId });
 
     // For Android, configure notification channel
     if (Platform.OS === 'android') {

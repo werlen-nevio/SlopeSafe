@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:8000/api/v1';
+export const API_BASE_URL = 'https://api.slopesafe.ch/api/v1';
 export const APP_NAME = 'SlopeSafe';
 export const DEFAULT_LANGUAGE = 'de';
 

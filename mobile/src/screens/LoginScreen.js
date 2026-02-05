@@ -8,21 +8,25 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { theme } from '../theme';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading } = useAuth();
+  const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-
     try {
       await login({ email, password });
     } catch (error) {
@@ -35,16 +39,25 @@ const LoginScreen = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView
+        contentContainerStyle={[styles.scrollContainer, { paddingTop: insets.top + 40 }]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.logoContainer}>
+          <Text style={styles.logo}>SlopeSafe</Text>
+          <Text style={styles.logoSubtitle}>Swiss Avalanche Safety</Text>
+        </View>
+
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Login to your account</Text>
+          <Text style={styles.title}>{t('auth.welcomeBack')}</Text>
+          <Text style={styles.subtitle}>{t('auth.loginSubtitle')}</Text>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
+            <Text style={styles.label}>{t('auth.email')}</Text>
             <TextInput
               style={styles.input}
-              placeholder="your@email.com"
+              placeholder={t('auth.emailPlaceholder')}
+              placeholderTextColor={theme.colors.textTertiary}
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -54,10 +67,11 @@ const LoginScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
+            <Text style={styles.label}>{t('auth.password')}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your password"
+              placeholder={t('auth.passwordPlaceholder')}
+              placeholderTextColor={theme.colors.textTertiary}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -71,14 +85,14 @@ const LoginScreen = ({ navigation }) => {
             disabled={loading}
           >
             <Text style={styles.buttonText}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? t('auth.loggingIn') : t('auth.login')}
             </Text>
           </TouchableOpacity>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Don't have an account? </Text>
+            <Text style={styles.footerText}>{t('auth.noAccount')} </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.link}>Register</Text>
+              <Text style={styles.link}>{t('auth.register')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -90,82 +104,97 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb'
+    backgroundColor: theme.colors.backgroundSecondary,
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 20
+    padding: 20,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  logo: {
+    fontSize: 32,
+    fontFamily: 'Inter_700Bold',
+    color: theme.colors.brandNavy,
+  },
+  logoSubtitle: {
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textSecondary,
+    marginTop: 4,
   },
   formContainer: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
+    backgroundColor: theme.colors.brandWhite,
+    borderRadius: theme.borderRadius.xl,
     padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3
+    ...theme.shadows.cardElevated,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginBottom: 8,
-    textAlign: 'center'
+    fontSize: theme.typography.sizes['2xl'],
+    fontFamily: 'Inter_700Bold',
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
-    color: '#6b7280',
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textSecondary,
     marginBottom: 24,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: 16
+    marginBottom: 16,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_600SemiBold',
+    color: theme.colors.textPrimary,
+    marginBottom: 6,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#ffffff'
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    padding: 14,
+    fontSize: theme.typography.sizes.base,
+    fontFamily: 'Inter_400Regular',
+    backgroundColor: theme.colors.brandWhite,
+    color: theme.colors.textPrimary,
   },
   button: {
-    backgroundColor: '#2563eb',
-    borderRadius: 8,
+    backgroundColor: theme.colors.brandOrange,
+    borderRadius: theme.borderRadius.md,
     padding: 16,
     alignItems: 'center',
-    marginTop: 8
+    marginTop: 8,
   },
   buttonDisabled: {
-    opacity: 0.6
+    opacity: 0.6,
   },
   buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600'
+    color: theme.colors.brandWhite,
+    fontSize: theme.typography.sizes.base,
+    fontFamily: 'Inter_600SemiBold',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24
+    marginTop: 24,
   },
   footerText: {
-    color: '#6b7280',
-    fontSize: 14
+    color: theme.colors.textSecondary,
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
   },
   link: {
-    color: '#2563eb',
-    fontSize: 14,
-    fontWeight: '600'
-  }
+    color: theme.colors.brandSkyBlue,
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_600SemiBold',
+  },
 });
 
 export default LoginScreen;

@@ -1,5 +1,8 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { favoritesApi } from '../api';
+
+const CACHE_KEY_FAVORITES = '@slopesafe_favorites';
 
 const FavoritesContext = createContext();
 
@@ -8,6 +11,29 @@ export const FavoritesProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    loadCachedFavorites();
+  }, []);
+
+  const loadCachedFavorites = async () => {
+    try {
+      const cached = await AsyncStorage.getItem(CACHE_KEY_FAVORITES);
+      if (cached) {
+        setFavorites(JSON.parse(cached));
+      }
+    } catch (err) {
+      // Silently fail
+    }
+  };
+
+  const cacheFavorites = async (data) => {
+    try {
+      await AsyncStorage.setItem(CACHE_KEY_FAVORITES, JSON.stringify(data));
+    } catch (err) {
+      // Silently fail
+    }
+  };
+
   const fetchFavorites = async () => {
     setLoading(true);
     setError(null);
@@ -15,11 +41,15 @@ export const FavoritesProvider = ({ children }) => {
       const response = await favoritesApi.getAll();
       if (response.success) {
         setFavorites(response.favorites);
+        cacheFavorites(response.favorites);
       }
       return response;
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Failed to fetch favorites';
       setError(errorMessage);
+      if (!err.response) {
+        await loadCachedFavorites();
+      }
       throw err;
     } finally {
       setLoading(false);
@@ -50,7 +80,9 @@ export const FavoritesProvider = ({ children }) => {
     try {
       const response = await favoritesApi.remove(resortId);
       if (response.success) {
-        setFavorites(favorites.filter(f => f.id !== resortId));
+        const updated = favorites.filter(f => f.id !== resortId);
+        setFavorites(updated);
+        cacheFavorites(updated);
       }
       return response;
     } catch (err) {
@@ -82,7 +114,7 @@ export const FavoritesProvider = ({ children }) => {
     addFavorite,
     removeFavorite,
     isFavorite,
-    toggleFavorite
+    toggleFavorite,
   };
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;

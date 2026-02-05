@@ -1,19 +1,40 @@
 import apiClient from './client';
 
+const normalizeResort = (r) => ({
+  ...r,
+  latitude: r.coordinates?.lat,
+  longitude: r.coordinates?.lng,
+  elevation_min: r.elevation?.min,
+  elevation_max: r.elevation?.max,
+  danger_level: r.danger_level ?? r.current_status?.danger_levels?.max ?? null,
+  last_updated: r.current_status?.updated_at ?? null,
+  current_status: r.current_status
+    ? {
+        ...r.current_status,
+        danger_level_low: r.current_status.danger_levels?.low,
+        danger_level_high: r.current_status.danger_levels?.high,
+        danger_level_max: r.current_status.danger_levels?.max,
+      }
+    : null,
+});
+
 export const resortsApi = {
   async getAll(params = {}) {
-    const response = await apiClient.get('/resorts', { params });
-    return response.data;
+    const response = await apiClient.get('/resorts', { params: { per_page: 200, ...params } });
+    const body = response.data;
+    return { success: true, resorts: body.data.map(normalizeResort), meta: body.meta };
   },
 
   async search(query) {
     const response = await apiClient.get('/resorts/search', { params: { q: query } });
-    return response.data;
+    const body = response.data;
+    return { success: true, resorts: body.data.map(normalizeResort) };
   },
 
   async getBySlug(slug) {
     const response = await apiClient.get(`/resorts/${slug}`);
-    return response.data;
+    const body = response.data;
+    return { success: true, resort: normalizeResort(body.data) };
   },
 
   async getStatus(slug) {
