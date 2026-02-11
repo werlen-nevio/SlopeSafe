@@ -67,9 +67,6 @@
     "elevationMax": "Max. Höhe",
     "coordinates": "Koordinaten",
     "currentStatus": "Aktuelle Lawinensituation",
-    "dangerLow": "Gefahrenstufe tief",
-    "dangerHigh": "Gefahrenstufe hoch",
-    "dangerMax": "Maximale Gefahrenstufe",
     "info": "Informationen",
     "avalancheProblems": "Lawinenprobleme",
     "aspects": "Hangrichtungen",
@@ -121,7 +118,7 @@
     "allElevations": "Alle Höhenlagen"
   },
   "historical": {
-    "title": "Gefahrenstufen-Verlauf",
+    "title": "Verlauf",
     "recentChanges": "Letzte Änderungen"
   },
   "favorites": {

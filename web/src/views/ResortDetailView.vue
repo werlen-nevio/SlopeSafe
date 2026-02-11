@@ -74,35 +74,6 @@
               <DangerLevelBadge :level="resort.current_status?.danger_levels?.max" />
             </div>
 
-            <div v-if="resort.current_status" class="status-details">
-              <div class="detail-row">
-                <span class="label">{{ $t('resort.dangerLow') }}:</span>
-                <span class="value">
-                  <DangerLevelBadge
-                    :level="resort.current_status.danger_levels?.low"
-                    :show-text="false"
-                  />
-                </span>
-              </div>
-              <div class="detail-row">
-                <span class="label">{{ $t('resort.dangerHigh') }}:</span>
-                <span class="value">
-                  <DangerLevelBadge
-                    :level="resort.current_status.danger_levels?.high"
-                    :show-text="false"
-                  />
-                </span>
-              </div>
-              <div class="detail-row">
-                <span class="label">{{ $t('resort.dangerMax') }}:</span>
-                <span class="value">
-                  <DangerLevelBadge
-                    :level="resort.current_status.danger_levels?.max"
-                    :show-text="false"
-                  />
-                </span>
-              </div>
-            </div>
           </div>
 
           <div v-if="resort.current_status?.avalanche_problems?.length" class="info-card avalanche-problems-card">

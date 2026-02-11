@@ -33,7 +33,7 @@ const DangerChart = ({ data }) => {
   });
 
   const points = sorted.map((item, i) => {
-    const level = item.danger_level || item.danger_level_max || 0;
+    const level = item.danger_level_max || item.danger_level || 0;
     const x = CHART_PADDING.left + (i / Math.max(data.length - 1, 1)) * chartWidth;
     const y = CHART_PADDING.top + chartHeight - (level / 5) * chartHeight;
     return { x, y, level };
@@ -223,9 +223,9 @@ const HistoricalTimeline = ({ slug }) => {
               <Text style={styles.changeDate}>
                 {formatDate(item.date || item.valid_from)}
               </Text>
-              <DangerLevelBadge level={item.danger_level || item.danger_level_max} compact />
+              <DangerLevelBadge level={item.danger_level_max || item.danger_level} compact />
               <Text style={styles.changeLevel}>
-                {getDangerLevelName(item.danger_level || item.danger_level_max, t)}
+                {getDangerLevelName(item.danger_level_max || item.danger_level, t)}
               </Text>
             </View>
           ))}

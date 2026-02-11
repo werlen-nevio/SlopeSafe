@@ -134,9 +134,6 @@ const ResortDetailScreen = ({ route, navigation }) => {
           <View style={styles.currentLevelRow}>
             <DangerLevelBadge level={resort.danger_level || status.danger_level_max} />
           </View>
-          <DetailRow label={t('resort.dangerLow')} level={status.danger_level_low} />
-          <DetailRow label={t('resort.dangerHigh')} level={status.danger_level_high} />
-          <DetailRow label={t('resort.dangerMax')} level={status.danger_level_max} />
         </View>
       )}
 

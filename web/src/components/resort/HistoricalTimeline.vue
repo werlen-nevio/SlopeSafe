@@ -55,12 +55,8 @@
             </div>
             <div class="timeline-info">
               <div class="danger-levels">
-                <span class="level-label">{{ $t('resort.dangerMax') }}:</span>
+                <span class="level-label">{{ $t('resort.dangerLevel') }}:</span>
                 <span class="level-value">{{ day.danger_level_max || '-' }}</span>
-                <span v-if="day.danger_level_high" class="level-detail">
-                  ({{ $t('resort.dangerLow') }}: {{ day.danger_level_low }},
-                  {{ $t('resort.dangerHigh') }}: {{ day.danger_level_high }})
-                </span>
               </div>
               <div v-if="day.avalanche_problems && day.avalanche_problems.length > 0" class="problems">
                 <span class="problems-label">{{ $t('resort.avalancheProblems') }}:</span>
@@ -333,11 +329,6 @@ const formatProblems = (problems) => {
   font-weight: 700;
   color: var(--color-text-primary);
   font-size: 1rem;
-}
-
-.level-detail {
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
 }
 
 .problems {

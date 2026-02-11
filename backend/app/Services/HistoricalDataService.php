@@ -102,16 +102,14 @@ class HistoricalDataService
             return Carbon::parse($status->created_at)->format('M d');
         })->values()->toArray();
 
-        $maxData = $sortedHistory->pluck('danger_level_max')->values()->toArray();
-        $highData = $sortedHistory->pluck('danger_level_high')->values()->toArray();
-        $lowData = $sortedHistory->pluck('danger_level_low')->values()->toArray();
+        $dangerData = $sortedHistory->pluck('danger_level_max')->values()->toArray();
 
         return [
             'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Maximum Danger Level',
-                    'data' => $maxData,
+                    'label' => 'Danger Level',
+                    'data' => $dangerData,
                     'borderColor' => '#ef4444',
                     'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
                     'borderWidth' => 3,
@@ -120,30 +118,6 @@ class HistoricalDataService
                     'pointRadius' => 5,
                     'pointHoverRadius' => 7,
                     'pointBackgroundColor' => '#ef4444',
-                ],
-                [
-                    'label' => 'High Elevation',
-                    'data' => $highData,
-                    'borderColor' => '#f59e0b',
-                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                    'borderWidth' => 2,
-                    'fill' => false,
-                    'tension' => 0.4,
-                    'pointRadius' => 4,
-                    'pointHoverRadius' => 6,
-                    'pointBackgroundColor' => '#f59e0b',
-                ],
-                [
-                    'label' => 'Low Elevation',
-                    'data' => $lowData,
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'borderWidth' => 2,
-                    'fill' => false,
-                    'tension' => 0.4,
-                    'pointRadius' => 4,
-                    'pointHoverRadius' => 6,
-                    'pointBackgroundColor' => '#10b981',
                 ],
             ],
         ];
@@ -173,8 +147,6 @@ class HistoricalDataService
                 return [
                     'date' => $status->created_at->toIso8601String(),
                     'danger_level_max' => $status->danger_level_max,
-                    'danger_level_high' => $status->danger_level_high,
-                    'danger_level_low' => $status->danger_level_low,
                     'aspects' => $status->aspects ?? [],
                     'avalanche_problems' => $status->avalanche_problems ?? [],
                     'valid_until' => $status->bulletin?->valid_until?->toIso8601String(),

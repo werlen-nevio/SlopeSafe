@@ -11,8 +11,6 @@ const normalizeResort = (r) => ({
   current_status: r.current_status
     ? {
         ...r.current_status,
-        danger_level_low: r.current_status.danger_levels?.low,
-        danger_level_high: r.current_status.danger_levels?.high,
         danger_level_max: r.current_status.danger_levels?.max,
       }
     : null,
