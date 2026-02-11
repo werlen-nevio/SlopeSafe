@@ -1,0 +1,173 @@
+{
+  "common": {
+    "loading": "Caricamento",
+    "back": "Indietro",
+    "backToHome": "Torna alla pagina iniziale",
+    "date": "Data",
+    "viewDetails": "Mostra dettagli",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "cancel": "Annulla",
+    "create": "Crea",
+    "update": "Aggiorna",
+    "saving": "Salvataggio"
+  },
+  "nav": {
+    "home": "Home",
+    "map": "Carta",
+    "favorites": "Preferiti"
+  },
+  "auth": {
+    "login": "Accedi",
+    "register": "Registrati",
+    "logout": "Esci",
+    "email": "E-mail",
+    "password": "Password",
+    "confirmPassword": "Conferma password",
+    "name": "Nome",
+    "emailPlaceholder": "vostro@email.ch",
+    "passwordPlaceholder": "Almeno 8 caratteri",
+    "confirmPasswordPlaceholder": "Ripeti la password",
+    "namePlaceholder": "Il vostro nome",
+    "noAccount": "Non hai ancora un account?",
+    "hasAccount": "Hai già un account?",
+    "passwordMismatch": "Le password non corrispondono"
+  },
+  "home": {
+    "title": "Comprensori sciistici svizzeri",
+    "subtitle": "Livelli di pericolo valanghe attuali per le Alpi svizzere",
+    "searchPlaceholder": "Cerca un comprensorio...",
+    "sortBy": "Ordina per",
+    "sortByDistance": "Nelle vicinanze",
+    "sortByName": "Nome",
+    "sortByDanger": "Grado di pericolo",
+    "sortByCanton": "Cantone",
+    "noResorts": "Nessun comprensorio trovato"
+  },
+  "resort": {
+    "canton": "Cantone",
+    "region": "Regione",
+    "elevation": "Altitudine",
+    "elevationMin": "Altitudine min.",
+    "elevationMax": "Altitudine max.",
+    "coordinates": "Coordinate",
+    "currentStatus": "Situazione valanghiva attuale",
+    "dangerLevel": "Grado di pericolo",
+    "info": "Informazioni",
+    "avalancheProblems": "Problemi valanghivi",
+    "aspects": "Esposizioni",
+    "updated": "Aggiornato",
+    "lastUpdated": "Ultimo aggiornamento"
+  },
+  "danger": {
+    "level": "Grado",
+    "unknown": "Sconosciuto",
+    "low": "Debole",
+    "moderate": "Moderato",
+    "considerable": "Marcato",
+    "high": "Forte",
+    "veryHigh": "Molto forte"
+  },
+  "trend": {
+    "increasing": "In aumento",
+    "decreasing": "In diminuzione",
+    "stable": "Stabile",
+    "unknown": "Sconosciuto"
+  },
+  "avalancheTypes": {
+    "wind_slab": "Neve ventata",
+    "persistent_weak_layers": "Strati deboli persistenti",
+    "new_snow": "Neve fresca",
+    "wet_snow": "Neve bagnata",
+    "gliding_snow": "Valanghe di slittamento",
+    "cornices": "Cornici",
+    "unknown": "Sconosciuto"
+  },
+  "aspects": {
+    "N": "Nord",
+    "NE": "Nord-est",
+    "E": "Est",
+    "SE": "Sud-est",
+    "S": "Sud",
+    "SW": "Sud-ovest",
+    "W": "Ovest",
+    "NW": "Nord-ovest",
+    "all": "Tutte le esposizioni"
+  },
+  "elevation": {
+    "above": "sopra {elevation}m",
+    "below": "sotto {elevation}m",
+    "between": "{lower}m - {upper}m",
+    "allElevations": "Tutte le altitudini"
+  },
+  "historical": {
+    "title": "Cronologia",
+    "recentChanges": "Modifiche recenti"
+  },
+  "favorites": {
+    "title": "I miei preferiti",
+    "subtitle": "I vostri comprensori sciistici preferiti",
+    "add": "Aggiungi ai preferiti",
+    "remove": "Rimuovi dai preferiti",
+    "noFavorites": "Non hai ancora aggiunto nessun preferito",
+    "browseResorts": "Esplora i comprensori"
+  },
+  "map": {
+    "title": "Carta delle valanghe",
+    "comingSoon": "Prossimamente",
+    "description": "Carta interattiva dei comprensori sciistici svizzeri e delle zone di pericolo valanghe",
+    "dangerLevel": "Grado di pericolo",
+    "showDanger": "Mostra zone di pericolo",
+    "hideDanger": "Nascondi zone di pericolo"
+  },
+  "weather": {
+    "current": "Meteo attuale",
+    "forecast": "Previsioni a 5 giorni",
+    "updated": "Aggiornato",
+    "today": "Oggi",
+    "tomorrow": "Domani",
+    "snowDepth": "Altezza della neve",
+    "newSnow24h": "Neve fresca 24h",
+    "wind": "Vento",
+    "visibility": "Visibilità",
+    "conditions": {
+      "clear": "Sereno",
+      "clouds": "Nuvoloso",
+      "rain": "Pioggia",
+      "drizzle": "Pioggerella",
+      "thunderstorm": "Temporale",
+      "snow": "Neve",
+      "mist": "Foschia",
+      "fog": "Nebbia",
+      "haze": "Caligine",
+      "unknown": "Sconosciuto"
+    }
+  },
+  "embed": {
+    "title": "Widget integrato",
+    "description": "Integrate le informazioni sul pericolo valanghe nel vostro sito web o display",
+    "selectResort": "Seleziona comprensorio",
+    "chooseResort": "Scegli un comprensorio",
+    "options": "Opzioni di integrazione",
+    "type": "Tipo di widget",
+    "compactWidget": "Widget compatto",
+    "fullscreenDashboard": "Dashboard a schermo intero",
+    "theme": "Tema",
+    "lightTheme": "Chiaro",
+    "darkTheme": "Scuro",
+    "language": "Lingua",
+    "preview": "Anteprima",
+    "embedCode": "Codice di integrazione",
+    "copyCode": "Copia codice",
+    "copied": "Copiato!",
+    "qrCode": "Codice QR"
+  },
+  "footer": {
+    "description": "Informazioni in tempo reale sul pericolo valanghe per i comprensori sciistici svizzeri",
+    "links": "Link",
+    "info": "Informazioni",
+    "dataSource": "Dati forniti da",
+    "lastUpdate": "Ultimo aggiornamento",
+    "rights": "Tutti i diritti riservati"
+  }
+}

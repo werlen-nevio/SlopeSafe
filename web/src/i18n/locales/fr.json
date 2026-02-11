@@ -1,0 +1,173 @@
+{
+  "common": {
+    "loading": "Chargement",
+    "back": "Retour",
+    "backToHome": "Retour à l'accueil",
+    "date": "Date",
+    "viewDetails": "Voir les détails",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "saving": "Enregistrement"
+  },
+  "nav": {
+    "home": "Accueil",
+    "map": "Carte",
+    "favorites": "Favoris"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "emailPlaceholder": "votre@email.ch",
+    "passwordPlaceholder": "Au moins 8 caractères",
+    "confirmPasswordPlaceholder": "Répéter le mot de passe",
+    "namePlaceholder": "Votre nom",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "passwordMismatch": "Les mots de passe ne correspondent pas"
+  },
+  "home": {
+    "title": "Stations de ski suisses",
+    "subtitle": "Niveaux de danger d'avalanche actuels pour les Alpes suisses",
+    "searchPlaceholder": "Rechercher une station...",
+    "sortBy": "Trier par",
+    "sortByDistance": "À proximité",
+    "sortByName": "Nom",
+    "sortByDanger": "Niveau de danger",
+    "sortByCanton": "Canton",
+    "noResorts": "Aucune station trouvée"
+  },
+  "resort": {
+    "canton": "Canton",
+    "region": "Région",
+    "elevation": "Altitude",
+    "elevationMin": "Altitude min.",
+    "elevationMax": "Altitude max.",
+    "coordinates": "Coordonnées",
+    "currentStatus": "Situation avalancheuse actuelle",
+    "dangerLevel": "Niveau de danger",
+    "info": "Informations",
+    "avalancheProblems": "Problèmes d'avalanche",
+    "aspects": "Expositions",
+    "updated": "Mis à jour",
+    "lastUpdated": "Dernière mise à jour"
+  },
+  "danger": {
+    "level": "Niveau",
+    "unknown": "Inconnu",
+    "low": "Faible",
+    "moderate": "Limité",
+    "considerable": "Marqué",
+    "high": "Fort",
+    "veryHigh": "Très fort"
+  },
+  "trend": {
+    "increasing": "En hausse",
+    "decreasing": "En baisse",
+    "stable": "Stable",
+    "unknown": "Inconnu"
+  },
+  "avalancheTypes": {
+    "wind_slab": "Neige soufflée",
+    "persistent_weak_layers": "Neige ancienne",
+    "new_snow": "Neige fraîche",
+    "wet_snow": "Neige mouillée",
+    "gliding_snow": "Avalanche de glissement",
+    "cornices": "Corniches",
+    "unknown": "Inconnu"
+  },
+  "aspects": {
+    "N": "Nord",
+    "NE": "Nord-est",
+    "E": "Est",
+    "SE": "Sud-est",
+    "S": "Sud",
+    "SW": "Sud-ouest",
+    "W": "Ouest",
+    "NW": "Nord-ouest",
+    "all": "Toutes les expositions"
+  },
+  "elevation": {
+    "above": "au-dessus de {elevation}m",
+    "below": "en dessous de {elevation}m",
+    "between": "{lower}m - {upper}m",
+    "allElevations": "Toutes les altitudes"
+  },
+  "historical": {
+    "title": "Historique",
+    "recentChanges": "Changements récents"
+  },
+  "favorites": {
+    "title": "Mes favoris",
+    "subtitle": "Vos stations de ski préférées",
+    "add": "Ajouter aux favoris",
+    "remove": "Retirer des favoris",
+    "noFavorites": "Vous n'avez pas encore ajouté de favoris",
+    "browseResorts": "Parcourir les stations"
+  },
+  "map": {
+    "title": "Carte des avalanches",
+    "comingSoon": "Bientôt disponible",
+    "description": "Carte interactive des stations de ski suisses et des zones de danger d'avalanche",
+    "dangerLevel": "Niveau de danger",
+    "showDanger": "Afficher les zones de danger",
+    "hideDanger": "Masquer les zones de danger"
+  },
+  "weather": {
+    "current": "Météo actuelle",
+    "forecast": "Prévisions à 5 jours",
+    "updated": "Mis à jour",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "snowDepth": "Hauteur de neige",
+    "newSnow24h": "Neige fraîche 24h",
+    "wind": "Vent",
+    "visibility": "Visibilité",
+    "conditions": {
+      "clear": "Dégagé",
+      "clouds": "Nuageux",
+      "rain": "Pluie",
+      "drizzle": "Bruine",
+      "thunderstorm": "Orage",
+      "snow": "Neige",
+      "mist": "Brume",
+      "fog": "Brouillard",
+      "haze": "Brume sèche",
+      "unknown": "Inconnu"
+    }
+  },
+  "embed": {
+    "title": "Widget intégré",
+    "description": "Intégrez les informations de danger d'avalanche sur votre site web ou votre écran",
+    "selectResort": "Sélectionner une station",
+    "chooseResort": "Choisir une station",
+    "options": "Options d'intégration",
+    "type": "Type de widget",
+    "compactWidget": "Widget compact",
+    "fullscreenDashboard": "Tableau de bord plein écran",
+    "theme": "Thème",
+    "lightTheme": "Clair",
+    "darkTheme": "Sombre",
+    "language": "Langue",
+    "preview": "Aperçu",
+    "embedCode": "Code d'intégration",
+    "copyCode": "Copier le code",
+    "copied": "Copié !",
+    "qrCode": "Code QR"
+  },
+  "footer": {
+    "description": "Informations en temps réel sur le danger d'avalanche pour les stations de ski suisses",
+    "links": "Liens",
+    "info": "Informations",
+    "dataSource": "Données fournies par",
+    "lastUpdate": "Dernière mise à jour",
+    "rights": "Tous droits réservés"
+  }
+}

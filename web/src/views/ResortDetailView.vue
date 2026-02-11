@@ -68,34 +68,32 @@
         </div>
 
         <div class="detail-content">
-          <div class="info-card">
-            <h2>{{ $t('resort.currentStatus') }}</h2>
-            <div class="danger-display">
+          <div class="info-card avalanche-card">
+            <div class="danger-banner">
+              <span class="danger-banner-label">{{ $t('resort.currentStatus') }}</span>
               <DangerLevelBadge :level="resort.current_status?.danger_levels?.max" />
             </div>
-
-          </div>
-
-          <div v-if="resort.current_status?.avalanche_problems?.length" class="info-card avalanche-problems-card">
-            <h2>{{ $t('resort.avalancheProblems') }}</h2>
-            <div class="problems-list">
-              <div
-                v-for="(problem, index) in resort.current_status.avalanche_problems"
-                :key="index"
-                class="problem-card"
-              >
-                <div class="problem-content">
-                  <div class="problem-info">
-                    <div class="problem-header">
-                      <span class="problem-type">{{ formatProblemType(problem.type) }}</span>
+            <div v-if="resort.current_status?.avalanche_problems?.length" class="problems-section">
+              <h3>{{ $t('resort.avalancheProblems') }}</h3>
+              <div class="problems-list">
+                <div
+                  v-for="(problem, index) in resort.current_status.avalanche_problems"
+                  :key="index"
+                  class="problem-card"
+                >
+                  <div class="problem-content">
+                    <div class="problem-info">
+                      <div class="problem-header">
+                        <span class="problem-type">{{ formatProblemType(problem.type) }}</span>
+                      </div>
+                      <div class="problem-elevation">
+                        {{ formatElevation(problem.elevation_lower, problem.elevation_upper) }}
+                      </div>
                     </div>
-                    <div class="problem-elevation">
-                      {{ formatElevation(problem.elevation_lower, problem.elevation_upper) }}
+                    <div class="problem-compass">
+                      <span class="compass-label">{{ $t('resort.aspects') }}</span>
+                      <AspectCompass :aspects="problem.aspects" />
                     </div>
-                  </div>
-                  <div class="problem-compass">
-                    <span class="compass-label">{{ $t('resort.aspects') }}</span>
-                    <AspectCompass :aspects="problem.aspects" />
                   </div>
                 </div>
               </div>
@@ -520,31 +518,53 @@ onMounted(async () => {
   min-height: 180px;
 }
 
-.danger-display {
+.avalanche-card {
+  grid-column: 1 / -1;
+  padding: 0;
+  overflow: hidden;
+}
+
+.danger-banner {
   display: flex;
-  justify-content: center;
-  margin: var(--spacing-md) 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  background: var(--color-background-secondary);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.danger-display :deep(.danger-badge) {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: 1rem;
+.danger-banner :deep(.danger-badge) {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  font-size: 1.25rem;
   border-radius: var(--radius-lg);
-  font-weight: 600;
-}
-
-.danger-display :deep(.danger-level) {
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 1rem;
   font-weight: 700;
 }
 
-.status-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-lg);
+.danger-banner :deep(.danger-level) {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.danger-banner-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.problems-section {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+.problems-section h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 .detail-row {
@@ -735,6 +755,20 @@ onMounted(async () => {
   }
 
   .info-card {
+    padding: var(--spacing-md);
+  }
+
+  .avalanche-card {
+    padding: 0;
+  }
+
+  .danger-banner {
+    padding: var(--spacing-md);
+    background: transparent;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .problems-section {
     padding: var(--spacing-md);
   }
 
