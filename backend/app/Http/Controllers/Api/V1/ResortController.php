@@ -38,7 +38,8 @@ class ResortController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
-        $resorts = $query->paginate(20);
+        $perPage = min((int) $request->query('per_page', 20), 200);
+        $resorts = $query->paginate($perPage);
 
         return ResortResource::collection($resorts);
     }

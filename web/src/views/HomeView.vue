@@ -173,7 +173,7 @@ const getUserLocation = () => {
 
 onMounted(async () => {
   getUserLocation();
-  await resortsStore.fetchResorts();
+  await resortsStore.fetchResorts({ per_page: 200 });
 });
 </script>
 

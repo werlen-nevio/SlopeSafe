@@ -73,8 +73,8 @@ const HomeScreen = ({ navigation }) => {
       case 'distance':
         if (userLocation) {
           return list.sort((a, b) => {
-            const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
-            const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+            const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.coordinates?.lat, a.coordinates?.lng);
+            const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.coordinates?.lat, b.coordinates?.lng);
             return distA - distB;
           });
         }
