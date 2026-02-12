@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DangerLevelBadge from './common/DangerLevelBadge';
 import { theme } from '../theme';
-import { formatRelativeDate } from '../utils/formatters';
+import { formatRelativeDate, formatElevation } from '../utils/formatters';
 
 const ResortCard = ({ resort, onPress }) => {
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ const ResortCard = ({ resort, onPress }) => {
       <View style={styles.body}>
         <View style={styles.infoRow}>
           <Text style={styles.label}>{t('resort.elevation')}</Text>
-          <Text style={styles.value}>{resort.elevation_min}m - {resort.elevation_max}m</Text>
+          <Text style={styles.value}>{formatElevation(resort.elevation_min, resort.elevation_max)}</Text>
         </View>
       </View>
 

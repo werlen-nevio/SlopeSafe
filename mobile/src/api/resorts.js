@@ -1,6 +1,6 @@
 import apiClient from './client';
 
-const normalizeResort = (r) => ({
+export const normalizeResort = (r) => ({
   ...r,
   latitude: r.coordinates?.lat,
   longitude: r.coordinates?.lng,

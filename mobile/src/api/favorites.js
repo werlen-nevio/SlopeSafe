@@ -1,9 +1,14 @@
 import apiClient from './client';
+import { normalizeResort } from './resorts';
 
 export const favoritesApi = {
   async getAll() {
     const response = await apiClient.get('/favorites');
-    return response.data;
+    const data = response.data;
+    return {
+      ...data,
+      favorites: (data.favorites || []).map(normalizeResort),
+    };
   },
 
   async add(resortId) {
