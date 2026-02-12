@@ -22,18 +22,34 @@ import { theme } from '../theme';
 
 const HomeScreen = ({ navigation }) => {
   const { resorts, searchResults, loading, isOffline, fetchResorts, searchResorts, clearSearch } = useResorts();
-  const { userLocation, requestLocation } = useLocation();
+  const { userLocation, locationPermission, requestLocation } = useLocation();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('name');
+  const [sortBy, setSortBy] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const debouncedQuery = useDebounce(searchQuery, 300);
 
   useEffect(() => {
     fetchResorts();
   }, []);
+
+  useEffect(() => {
+    if (sortBy !== null) return;
+    if (locationPermission === 'granted' && userLocation) {
+      setSortBy('distance');
+    } else if (locationPermission !== null) {
+      setSortBy('name');
+    }
+  }, [locationPermission, userLocation]);
+
+  // Fallback if permission check takes too long
+  useEffect(() => {
+    if (sortBy !== null) return;
+    const timeout = setTimeout(() => setSortBy((prev) => prev ?? 'name'), 2000);
+    return () => clearTimeout(timeout);
+  }, [sortBy]);
 
   useEffect(() => {
     if (debouncedQuery.trim()) {

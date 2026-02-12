@@ -8,6 +8,26 @@ export const LocationProvider = ({ children }) => {
   const [locationPermission, setLocationPermission] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const { status } = await Location.getForegroundPermissionsAsync();
+        setLocationPermission(status);
+        if (status === 'granted') {
+          const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
+          });
+          setUserLocation({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+        }
+      } catch (err) {
+        // Silently fail
+      }
+    })();
+  }, []);
+
   const requestLocation = async () => {
     setLoading(true);
     try {
