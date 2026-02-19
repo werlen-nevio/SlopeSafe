@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,13 @@ import {
   Switch,
   StyleSheet,
   Alert,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useResorts } from '../contexts/ResortsContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 import { theme } from '../theme';
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -20,6 +22,7 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
   const existingRule = route.params?.rule;
   const { createAlertRule, updateAlertRule } = useNotifications();
   const { resorts, fetchResorts } = useResorts();
+  const { favorites } = useFavorites();
   const { t } = useTranslation();
 
   const [resortId, setResortId] = useState(existingRule?.ski_resort_id || null);
@@ -30,10 +33,23 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
   const [dailyReminder, setDailyReminder] = useState(existingRule?.daily_reminder_enabled ?? false);
   const [activeDays, setActiveDays] = useState(existingRule?.active_days || DAYS);
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (resorts.length === 0) fetchResorts();
   }, []);
+
+  const favoriteIds = useMemo(() => new Set(favorites.map((f) => f.id)), [favorites]);
+
+  const filteredResorts = useMemo(() => {
+    const query = search.toLowerCase().trim();
+    const matched = query
+      ? resorts.filter((r) => r.name.toLowerCase().includes(query))
+      : resorts;
+    const favs = matched.filter((r) => favoriteIds.has(r.id));
+    const rest = matched.filter((r) => !favoriteIds.has(r.id));
+    return [...favs, ...rest];
+  }, [resorts, favorites, favoriteIds, search]);
 
   const toggleDay = (day) => {
     setActiveDays((prev) =>
@@ -74,6 +90,22 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
       {/* Resort selector */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>{t('notifications.resort')}</Text>
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={16} color={theme.colors.textTertiary} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder={t('common.search')}
+            placeholderTextColor={theme.colors.textTertiary}
+            value={search}
+            onChangeText={setSearch}
+            autoCorrect={false}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch('')}>
+              <Ionicons name="close-circle" size={16} color={theme.colors.textTertiary} />
+            </TouchableOpacity>
+          )}
+        </View>
         <TouchableOpacity
           style={[styles.option, !resortId && styles.optionActive]}
           onPress={() => setResortId(null)}
@@ -82,21 +114,27 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
             {t('notifications.allResorts')}
           </Text>
         </TouchableOpacity>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.resortScroll}>
-          {resorts.slice(0, 20).map((r) => (
+        <ScrollView style={styles.resortList} nestedScrollEnabled>
+          {filteredResorts.map((r) => (
             <TouchableOpacity
               key={r.id}
-              style={[styles.option, resortId === r.id && styles.optionActive]}
+              style={[styles.resortRow, resortId === r.id && styles.resortRowActive]}
               onPress={() => setResortId(r.id)}
             >
+              {favoriteIds.has(r.id) && (
+                <Ionicons name="star" size={14} color={resortId === r.id ? theme.colors.brandWhite : theme.colors.brandOrange} />
+              )}
               <Text
-                style={[styles.optionText, resortId === r.id && styles.optionTextActive]}
+                style={[styles.resortRowText, resortId === r.id && styles.resortRowTextActive]}
                 numberOfLines={1}
               >
                 {r.name}
               </Text>
             </TouchableOpacity>
           ))}
+          {filteredResorts.length === 0 && search.length > 0 && (
+            <Text style={styles.noResults}>{t('common.noResults')}</Text>
+          )}
         </ScrollView>
       </View>
 
@@ -222,6 +260,22 @@ const styles = StyleSheet.create({
     color: theme.colors.textPrimary,
     marginBottom: 12,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    gap: 8,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textPrimary,
+  },
   option: {
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -229,7 +283,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.backgroundSecondary,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    marginRight: 8,
     marginBottom: 8,
   },
   optionActive: {
@@ -244,8 +297,40 @@ const styles = StyleSheet.create({
   optionTextActive: {
     color: theme.colors.brandWhite,
   },
-  resortScroll: {
-    maxHeight: 50,
+  resortList: {
+    maxHeight: 200,
+  },
+  resortRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    marginBottom: 6,
+  },
+  resortRowActive: {
+    backgroundColor: theme.colors.brandNavy,
+    borderColor: theme.colors.brandNavy,
+  },
+  resortRowText: {
+    flex: 1,
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_500Medium',
+    color: theme.colors.textSecondary,
+  },
+  resortRowTextActive: {
+    color: theme.colors.brandWhite,
+  },
+  noResults: {
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_400Regular',
+    color: theme.colors.textTertiary,
+    textAlign: 'center',
+    paddingVertical: 12,
   },
   switchRow: {
     flexDirection: 'row',

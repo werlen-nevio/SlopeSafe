@@ -65,3 +65,4 @@ export const addNotificationResponseListener = (callback) => {
   const subscription = Notifications.addNotificationResponseReceivedListener(callback);
   return subscription;
 };
+

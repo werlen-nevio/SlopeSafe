@@ -111,7 +111,7 @@ class AlertRuleService
     public function getDailyReminders(): Collection
     {
         $currentTime = now()->format('H:i:00');
-        $currentDay = strtolower(now()->format('l')); // 'monday', 'tuesday', etc.
+        $currentDay = strtolower(now()->format('D')); // 'mon', 'tue', etc.
 
         return AlertRule::where('is_active', true)
             ->where('daily_reminder_enabled', true)

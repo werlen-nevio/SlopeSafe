@@ -25,7 +25,7 @@ class AlertRuleController extends Controller
 
         return response()->json([
             'success' => true,
-            'rules' => $rules->map(function ($rule) {
+            'alert_rules' => $rules->map(function ($rule) {
                 return $this->formatRule($rule);
             }),
         ]);
@@ -45,7 +45,7 @@ class AlertRuleController extends Controller
             'daily_reminder_time' => 'nullable|date_format:H:i',
             'daily_reminder_enabled' => 'boolean',
             'active_days' => 'nullable|array',
-            'active_days.*' => 'string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'active_days.*' => 'string|in:mon,tue,wed,thu,fri,sat,sun',
             'is_active' => 'boolean',
         ]);
 
@@ -77,7 +77,7 @@ class AlertRuleController extends Controller
             'daily_reminder_time' => 'nullable|date_format:H:i',
             'daily_reminder_enabled' => 'boolean',
             'active_days' => 'nullable|array',
-            'active_days.*' => 'string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'active_days.*' => 'string|in:mon,tue,wed,thu,fri,sat,sun',
             'is_active' => 'boolean',
         ]);
 

@@ -48,8 +48,8 @@ const NotificationHistoryScreen = () => {
         </View>
         <View style={styles.content}>
           <Text style={styles.message} numberOfLines={2}>{item.message}</Text>
-          {item.resort_name && (
-            <Text style={styles.resort}>{item.resort_name}</Text>
+          {item.resort?.name && (
+            <Text style={styles.resort}>{item.resort.name}</Text>
           )}
           <Text style={styles.time}>{formatRelativeDate(item.sent_at || item.created_at)}</Text>
         </View>

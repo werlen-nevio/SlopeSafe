@@ -65,7 +65,7 @@ class AlertRule extends Model
             return true; // If no days specified, all days are active
         }
 
-        $today = strtolower(now()->format('l')); // 'monday', 'tuesday', etc.
+        $today = strtolower(now()->format('D')); // 'mon', 'tue', etc.
         return in_array($today, array_map('strtolower', $this->active_days));
     }
 }

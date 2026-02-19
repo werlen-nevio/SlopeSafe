@@ -51,7 +51,7 @@ const AlertRulesScreen = ({ navigation }) => {
     <View style={styles.ruleCard}>
       <View style={styles.ruleHeader}>
         <Text style={styles.ruleName}>
-          {item.ski_resort?.name || t('notifications.allResorts')}
+          {item.resort?.name || t('notifications.allResorts')}
         </Text>
         <Switch
           value={item.is_active}
