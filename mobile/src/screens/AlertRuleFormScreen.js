@@ -79,7 +79,7 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
       }
       navigation.goBack();
     } catch (err) {
-      Alert.alert('Error', err.response?.data?.message || 'Failed to save rule');
+      Alert.alert(t('common.error'), err.response?.data?.message || t('notifications.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -140,7 +140,7 @@ const AlertRuleFormScreen = ({ route, navigation }) => {
 
       {/* Triggers */}
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Triggers</Text>
+        <Text style={styles.sectionTitle}>{t('notifications.triggers')}</Text>
         <View style={styles.switchRow}>
           <Text style={styles.switchLabel}>{t('notifications.onIncrease')}</Text>
           <Switch
@@ -278,12 +278,12 @@ const styles = StyleSheet.create({
   },
   option: {
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: theme.borderRadius.md,
     backgroundColor: theme.colors.backgroundSecondary,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   optionActive: {
     backgroundColor: theme.colors.brandNavy,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   levelRow: {
-    marginBottom: 12,
+    marginBottom: 8,
   },
   levelPicker: {
     flexDirection: 'row',

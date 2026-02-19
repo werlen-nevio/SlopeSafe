@@ -16,7 +16,10 @@
     "retry": "Retry",
     "offline": "You are offline",
     "offlineData": "Showing cached data",
-    "pullToRefresh": "Pull to refresh"
+    "pullToRefresh": "Pull to refresh",
+    "search": "Search",
+    "noResults": "No results found",
+    "error": "Error"
   },
   "nav": {
     "home": "Home",
@@ -188,7 +191,9 @@
     "deleteRule": "Delete Rule",
     "deleteRuleConfirm": "Are you sure you want to delete this alert rule?",
     "permissionDenied": "Notification permission denied",
-    "enableInSettings": "Enable notifications in your device settings"
+    "enableInSettings": "Enable notifications in your device settings",
+    "triggers": "Triggers",
+    "saveFailed": "Failed to save rule"
   },
   "days": {
     "mon": "Mon",

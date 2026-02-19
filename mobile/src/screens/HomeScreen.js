@@ -37,8 +37,8 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (sortBy !== null) return;
-    if (locationPermission === 'granted' && userLocation) {
-      setSortBy('distance');
+    if (locationPermission === 'granted') {
+      if (userLocation) setSortBy('distance');
     } else if (locationPermission !== null) {
       setSortBy('name');
     }

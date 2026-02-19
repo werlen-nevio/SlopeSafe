@@ -60,7 +60,6 @@ const AlertRulesScreen = ({ navigation }) => {
             toggleAlertRule(item.id);
           }}
           trackColor={{ false: theme.colors.border, true: theme.colors.brandSkyBlue }}
-          thumbColor={item.is_active ? theme.colors.brandNavy : theme.colors.textTertiary}
         />
       </View>
 
@@ -90,10 +89,12 @@ const AlertRulesScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('AlertRuleForm', { rule: item })}
           style={styles.editBtn}
         >
-          <Ionicons name="create-outline" size={18} color={theme.colors.textSecondary} />
+          <Ionicons name="create-outline" size={16} color={theme.colors.brandNavy} />
+          <Text style={styles.editBtnText}>{t('common.edit')}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteBtn}>
-          <Ionicons name="trash-outline" size={18} color={theme.colors.danger} />
+          <Ionicons name="trash-outline" size={16} color={theme.colors.danger} />
+          <Text style={styles.deleteBtnText}>{t('common.delete')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -144,8 +145,8 @@ const styles = StyleSheet.create({
   ruleCard: {
     backgroundColor: theme.colors.brandWhite,
     borderRadius: theme.borderRadius.lg,
-    padding: 14,
-    marginBottom: 10,
+    padding: 16,
+    marginBottom: 12,
     ...theme.shadows.card,
   },
   ruleHeader: {
@@ -183,24 +184,39 @@ const styles = StyleSheet.create({
   ruleActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: 12,
+    gap: 8,
     borderTopWidth: 1,
     borderTopColor: theme.colors.borderLight,
-    paddingTop: 8,
+    paddingTop: 12,
+    marginTop: 4,
   },
   editBtn: {
-    padding: 10,
-    minWidth: 44,
-    minHeight: 44,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.backgroundSecondary,
+  },
+  editBtnText: {
+    fontSize: theme.typography.sizes.xs,
+    fontFamily: 'Inter_500Medium',
+    color: theme.colors.brandNavy,
   },
   deleteBtn: {
-    padding: 10,
-    minWidth: 44,
-    minHeight: 44,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: '#FEF2F2',
+  },
+  deleteBtnText: {
+    fontSize: theme.typography.sizes.xs,
+    fontFamily: 'Inter_500Medium',
+    color: theme.colors.danger,
   },
   fab: {
     position: 'absolute',

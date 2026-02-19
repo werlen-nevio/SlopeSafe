@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import Constants from 'expo-constants';
 import { useAuth } from '../contexts/AuthContext';
+import MiniGame from '../components/MiniGame';
 import { theme } from '../theme';
+
+const APP_VERSION = Constants.expoConfig?.version ?? '1.0.0';
 
 const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const [showGame, setShowGame] = useState(false);
+  const tapCount = useRef(0);
+  const tapTimer = useRef(null);
+
+  const handleVersionTap = () => {
+    tapCount.current++;
+    if (tapTimer.current) clearTimeout(tapTimer.current);
+    if (tapCount.current >= 7) {
+      tapCount.current = 0;
+      setShowGame(true);
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 2000);
+    }
+  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -57,14 +75,16 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.section}>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={handleVersionTap} activeOpacity={0.7}>
           <View style={styles.menuLeft}>
             <Ionicons name="information-circle-outline" size={20} color={theme.colors.textSecondary} />
             <Text style={styles.menuText}>{t('profile.about')}</Text>
           </View>
-          <Text style={styles.versionText}>v1.0.0</Text>
+          <Text style={styles.versionText}>v{APP_VERSION}</Text>
         </TouchableOpacity>
       </View>
+
+      <MiniGame visible={showGame} onClose={() => setShowGame(false)} />
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityRole="button" accessibilityLabel={t('auth.logout')}>
         <Ionicons name="log-out-outline" size={20} color={theme.colors.brandWhite} />

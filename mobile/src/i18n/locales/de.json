@@ -16,7 +16,10 @@
     "retry": "Erneut versuchen",
     "offline": "Sie sind offline",
     "offlineData": "Zwischengespeicherte Daten",
-    "pullToRefresh": "Zum Aktualisieren ziehen"
+    "pullToRefresh": "Zum Aktualisieren ziehen",
+    "search": "Suchen",
+    "noResults": "Keine Ergebnisse",
+    "error": "Fehler"
   },
   "nav": {
     "home": "Startseite",
@@ -188,7 +191,9 @@
     "deleteRule": "Regel löschen",
     "deleteRuleConfirm": "Sind Sie sicher, dass Sie diese Alarmregel löschen möchten?",
     "permissionDenied": "Benachrichtigungsberechtigung verweigert",
-    "enableInSettings": "Aktivieren Sie Benachrichtigungen in Ihren Geräteeinstellungen"
+    "enableInSettings": "Aktivieren Sie Benachrichtigungen in Ihren Geräteeinstellungen",
+    "triggers": "Auslöser",
+    "saveFailed": "Regel konnte nicht gespeichert werden"
   },
   "days": {
     "mon": "Mo",
