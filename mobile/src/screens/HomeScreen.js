@@ -21,7 +21,7 @@ import EmptyState from '../components/common/EmptyState';
 import { theme } from '../theme';
 
 const HomeScreen = ({ navigation }) => {
-  const { resorts, searchResults, loading, isOffline, fetchResorts, searchResorts, clearSearch } = useResorts();
+  const { resorts, searchResults, loading, searchLoading, isOffline, fetchResorts, searchResorts, clearSearch } = useResorts();
   const { userLocation, locationPermission, requestLocation } = useLocation();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -75,6 +75,7 @@ const HomeScreen = ({ navigation }) => {
     }
   }, []);
 
+  const isSearchPending = !!searchQuery.trim() && searchQuery !== debouncedQuery;
   const displayResorts = searchQuery ? searchResults : resorts;
 
   const sortedResorts = React.useMemo(() => {
@@ -127,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
 
       <SortSelector activeSort={sortBy} onSortChange={handleSortChange} />
 
-      {loading && resorts.length === 0 ? (
+      {(loading && resorts.length === 0) || searchLoading || isSearchPending ? (
         <SkeletonResortList />
       ) : (
         <FlatList

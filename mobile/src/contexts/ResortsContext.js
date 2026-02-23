@@ -12,6 +12,7 @@ export const ResortsProvider = ({ children }) => {
   const [currentResort, setCurrentResort] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
 
@@ -95,7 +96,7 @@ export const ResortsProvider = ({ children }) => {
       return;
     }
 
-    setLoading(true);
+    setSearchLoading(true);
     setError(null);
     try {
       const response = await resortsApi.search(query);
@@ -118,7 +119,7 @@ export const ResortsProvider = ({ children }) => {
       }
       throw err;
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   };
 
@@ -131,6 +132,7 @@ export const ResortsProvider = ({ children }) => {
     currentResort,
     searchResults,
     loading,
+    searchLoading,
     error,
     isOffline,
     fetchResorts,
