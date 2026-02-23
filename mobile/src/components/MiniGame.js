@@ -51,7 +51,7 @@ const MiniGame = ({ visible, onClose }) => {
   const [, forceUpdate] = useState(0);
 
   // Animation refs
-  const snowflakeYs = useRef(SNOWFLAKE_CONFIGS.map(() => new Animated.Value(-20))).current;
+  const snowflakeYs = useRef(SNOWFLAKE_CONFIGS.map(() => new Animated.Value(SCREEN_H + 20))).current;
   const scoreScale = useRef(new Animated.Value(1)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const sprayOpacity = useRef(new Animated.Value(0.4)).current;
@@ -108,12 +108,12 @@ const MiniGame = ({ visible, onClose }) => {
         Animated.sequence([
           Animated.delay(config.delay),
           Animated.timing(snowflakeYs[i], {
-            toValue: SCREEN_H + 20,
+            toValue: -20,
             duration: config.duration,
             useNativeDriver: true,
           }),
           Animated.timing(snowflakeYs[i], {
-            toValue: -20,
+            toValue: SCREEN_H + 20,
             duration: 0,
             useNativeDriver: true,
           }),
@@ -218,17 +218,17 @@ const MiniGame = ({ visible, onClose }) => {
 
       if (tickCount.current % SPAWN_INTERVAL === 0) {
         const gapStart = Math.random() * (SCREEN_W - GATE_GAP - 40) + 20;
-        gates.current.push({ y: -GATE_HEIGHT, gapStart, passed: false });
+        gates.current.push({ y: SCREEN_H, gapStart, passed: false });
       }
 
       const currentSkierX = skierLiveX.current;
-      const skierTop = SCREEN_H - 140;
+      const skierTop = 120;
       const skierBottom = skierTop + SKIER_SIZE;
       const skierLeft = currentSkierX + HITBOX_PADDING;
       const skierRight = currentSkierX + SKIER_SIZE - HITBOX_PADDING;
 
       gates.current = gates.current.filter((gate) => {
-        gate.y += GATE_SPEED;
+        gate.y -= GATE_SPEED;
 
         const gateBottom = gate.y + GATE_HEIGHT;
         if (gateBottom > skierTop && gate.y < skierBottom) {
@@ -241,13 +241,13 @@ const MiniGame = ({ visible, onClose }) => {
           }
         }
 
-        if (!gate.passed && gate.y > skierBottom) {
+        if (!gate.passed && gate.y + GATE_HEIGHT < skierTop) {
           gate.passed = true;
           scoreRef.current++;
           setScore(scoreRef.current);
         }
 
-        return gate.y < SCREEN_H;
+        return gate.y + GATE_HEIGHT > 0;
       });
 
       forceUpdate((n) => n + 1);
@@ -339,22 +339,22 @@ const MiniGame = ({ visible, onClose }) => {
               width: GATE_GAP,
               height: GATE_HEIGHT + 6,
               backgroundColor: 'rgba(91, 164, 212, 0.12)',
-              borderTopWidth: 1.5,
-              borderTopColor: 'rgba(255, 255, 255, 0.4)',
+              borderBottomWidth: 1.5,
+              borderBottomColor: 'rgba(255, 255, 255, 0.4)',
               borderRadius: 4,
               zIndex: 4,
             }} />
 
             {/* Left pole + flag */}
             <View style={[styles.gatePole, { top: gate.y - 8, left: gate.gapStart - 2 }]}>
-              <View style={styles.gateFlagLeft} />
               <View style={styles.gatePoleStick} />
+              <View style={styles.gateFlagLeft} />
             </View>
 
             {/* Right pole + flag */}
             <View style={[styles.gatePole, { top: gate.y - 8, left: gate.gapStart + GATE_GAP - 2 }]}>
-              <View style={styles.gateFlagRight} />
               <View style={styles.gatePoleStick} />
+              <View style={styles.gateFlagRight} />
             </View>
           </React.Fragment>
         ))}
@@ -365,7 +365,7 @@ const MiniGame = ({ visible, onClose }) => {
             styles.skier,
             {
               left: skierX,
-              top: SCREEN_H - 140,
+              top: 120,
               transform: [
                 {
                   rotate: skierX.interpolate({
@@ -378,20 +378,21 @@ const MiniGame = ({ visible, onClose }) => {
             },
           ]}
         >
-          <View style={styles.skierShadow} />
-          <FontAwesome5 name="skiing" size={28} color={theme.colors.brandNavy} solid />
+          <View style={{ transform: [{ rotate: '45deg' }] }}>
+            <FontAwesome5 name="skiing" size={30} color={theme.colors.brandNavy} solid />
+          </View>
           {started && !gameOver && (
             <>
               <Animated.View
                 style={[
                   styles.sprayDot,
-                  { bottom: -6, left: 2, width: 6, height: 6, borderRadius: 3, opacity: sprayOpacity },
+                  { top: -6, left: 2, width: 6, height: 6, borderRadius: 3, opacity: sprayOpacity },
                 ]}
               />
               <Animated.View
                 style={[
                   styles.sprayDot,
-                  { bottom: -8, right: 2, width: 4, height: 4, borderRadius: 2, opacity: sprayOpacity },
+                  { top: -8, right: 2, width: 4, height: 4, borderRadius: 2, opacity: sprayOpacity },
                 ]}
               />
             </>
@@ -498,16 +499,16 @@ const styles = StyleSheet.create({
   gateFlagLeft: {
     width: 0,
     height: 0,
-    borderTopWidth: 10,
-    borderTopColor: theme.colors.brandOrange,
+    borderBottomWidth: 10,
+    borderBottomColor: theme.colors.brandOrange,
     borderRightWidth: 10,
     borderRightColor: 'transparent',
   },
   gateFlagRight: {
     width: 0,
     height: 0,
-    borderTopWidth: 10,
-    borderTopColor: theme.colors.brandSkyBlue,
+    borderBottomWidth: 10,
+    borderBottomColor: theme.colors.brandSkyBlue,
     borderLeftWidth: 10,
     borderLeftColor: 'transparent',
   },
@@ -526,15 +527,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
-  },
-  skierShadow: {
-    position: 'absolute',
-    bottom: -4,
-    left: 4,
-    right: 4,
-    height: 8,
-    borderRadius: 50,
-    backgroundColor: 'rgba(0,0,0,0.15)',
   },
   sprayDot: {
     position: 'absolute',
