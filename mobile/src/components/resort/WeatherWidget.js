@@ -30,8 +30,8 @@ const WeatherWidget = ({ weather }) => {
       </View>
 
       <View style={styles.detailsGrid}>
-        <DetailItem label={t('weather.wind')} value={weather.wind_speed != null ? `${weather.wind_speed} km/h` : '-'} />
-        <DetailItem label={t('weather.visibility')} value={weather.visibility != null ? `${weather.visibility} km` : '-'} />
+        <DetailItem label={t('weather.wind')} value={weather.wind_speed != null ? `${Math.round(weather.wind_speed * 10) / 10} km/h` : '-'} />
+        <DetailItem label={t('weather.visibility')} value={weather.visibility != null ? `${Math.round(weather.visibility * 10) / 10} km` : '-'} />
       </View>
 
       {weather.forecast && weather.forecast.length > 0 && (
