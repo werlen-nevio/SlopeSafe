@@ -203,5 +203,12 @@
     "fri": "Ven",
     "sat": "Sam",
     "sun": "Dim"
+  },
+  "miniGame": {
+    "dragToSteer": "Glissez pour diriger",
+    "steerThroughGates": "Passez entre les piquets !",
+    "gameOver": "Partie terminée",
+    "score": "Score",
+    "playAgain": "Rejouer"
   }
 }

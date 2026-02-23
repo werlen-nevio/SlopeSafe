@@ -203,5 +203,12 @@
     "fri": "Fr",
     "sat": "Sa",
     "sun": "So"
+  },
+  "miniGame": {
+    "dragToSteer": "Wischen zum Lenken",
+    "steerThroughGates": "Fahre zwischen den Stangen durch!",
+    "gameOver": "Spiel vorbei",
+    "score": "Punkte",
+    "playAgain": "Nochmal spielen"
   }
 }

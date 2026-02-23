@@ -203,5 +203,12 @@
     "fri": "Fri",
     "sat": "Sat",
     "sun": "Sun"
+  },
+  "miniGame": {
+    "dragToSteer": "Swipe to steer",
+    "steerThroughGates": "Steer between the flags!",
+    "gameOver": "Game Over",
+    "score": "Score",
+    "playAgain": "Play Again"
   }
 }

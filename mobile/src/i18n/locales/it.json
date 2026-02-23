@@ -203,5 +203,12 @@
     "fri": "Ven",
     "sat": "Sab",
     "sun": "Dom"
+  },
+  "miniGame": {
+    "dragToSteer": "Scorri per sterzare",
+    "steerThroughGates": "Passa tra i paletti!",
+    "gameOver": "Partita finita",
+    "score": "Punteggio",
+    "playAgain": "Gioca ancora"
   }
 }

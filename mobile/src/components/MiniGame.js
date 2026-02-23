@@ -9,7 +9,8 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
@@ -18,19 +19,44 @@ const GATE_GAP = 120;
 const GATE_HEIGHT = 24;
 const GATE_SPEED = 4;
 const SPAWN_INTERVAL = 80;
+const HITBOX_PADDING = 6;
+
+// Snowflake configs (generated once at module scope)
+const NUM_SNOWFLAKES = 15;
+const SNOWFLAKE_CONFIGS = Array.from({ length: NUM_SNOWFLAKES }, () => ({
+  x: Math.random() * SCREEN_W,
+  size: 4 + Math.random() * 8,
+  opacity: 0.3 + Math.random() * 0.5,
+  duration: 4000 + Math.random() * 6000,
+  delay: Math.random() * 3000,
+}));
+
+const TRACK_POSITIONS = [0.2, 0.4, 0.6, 0.8];
 
 const MiniGame = ({ visible, onClose }) => {
+  const { t } = useTranslation();
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
+  const [scorePops, setScorePops] = useState([]);
+  const [countUpScore, setCountUpScore] = useState(0);
   const skierX = useRef(new Animated.Value(SCREEN_W / 2 - SKIER_SIZE / 2)).current;
   const skierPos = useRef(SCREEN_W / 2 - SKIER_SIZE / 2);
+  const skierLiveX = useRef(SCREEN_W / 2 - SKIER_SIZE / 2);
   const gates = useRef([]);
   const frameId = useRef(null);
   const tickCount = useRef(0);
   const scoreRef = useRef(0);
   const gameOverRef = useRef(false);
   const [, forceUpdate] = useState(0);
+
+  // Animation refs
+  const snowflakeYs = useRef(SNOWFLAKE_CONFIGS.map(() => new Animated.Value(-20))).current;
+  const scoreScale = useRef(new Animated.Value(1)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const sprayOpacity = useRef(new Animated.Value(0.4)).current;
+  const gameOverScale = useRef(new Animated.Value(0.5)).current;
+  const gameOverOpacity = useRef(new Animated.Value(0)).current;
 
   const panResponder = useRef(
     PanResponder.create({
@@ -41,9 +67,12 @@ const MiniGame = ({ visible, onClose }) => {
         if (!started) setStarted(true);
         const newX = Math.max(0, Math.min(SCREEN_W - SKIER_SIZE, skierPos.current + gs.dx));
         skierX.setValue(newX);
+        skierLiveX.current = newX;
       },
       onPanResponderRelease: (_, gs) => {
-        skierPos.current = Math.max(0, Math.min(SCREEN_W - SKIER_SIZE, skierPos.current + gs.dx));
+        const finalX = Math.max(0, Math.min(SCREEN_W - SKIER_SIZE, skierPos.current + gs.dx));
+        skierPos.current = finalX;
+        skierLiveX.current = finalX;
       },
     })
   ).current;
@@ -52,19 +81,134 @@ const MiniGame = ({ visible, onClose }) => {
     setScore(0);
     setGameOver(false);
     setStarted(false);
+    setScorePops([]);
+    setCountUpScore(0);
     scoreRef.current = 0;
     gameOverRef.current = false;
     gates.current = [];
     tickCount.current = 0;
     skierPos.current = SCREEN_W / 2 - SKIER_SIZE / 2;
+    skierLiveX.current = SCREEN_W / 2 - SKIER_SIZE / 2;
     skierX.setValue(SCREEN_W / 2 - SKIER_SIZE / 2);
-  }, [skierX]);
+    scoreScale.setValue(1);
+    gameOverScale.setValue(0.5);
+    gameOverOpacity.setValue(0);
+  }, [skierX, scoreScale, gameOverScale, gameOverOpacity]);
 
   useEffect(() => {
     if (!visible) return;
     reset();
   }, [visible, reset]);
 
+  // Snowflake animations
+  useEffect(() => {
+    if (!visible) return;
+    const animations = SNOWFLAKE_CONFIGS.map((config, i) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(config.delay),
+          Animated.timing(snowflakeYs[i], {
+            toValue: SCREEN_H + 20,
+            duration: config.duration,
+            useNativeDriver: true,
+          }),
+          Animated.timing(snowflakeYs[i], {
+            toValue: -20,
+            duration: 0,
+            useNativeDriver: true,
+          }),
+        ])
+      )
+    );
+    animations.forEach((a) => a.start());
+    return () => animations.forEach((a) => a.stop());
+  }, [visible, snowflakeYs]);
+
+  // Start screen pulse
+  useEffect(() => {
+    if (visible && !started && !gameOver) {
+      const anim = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, { toValue: 1.1, duration: 800, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+        ])
+      );
+      anim.start();
+      return () => anim.stop();
+    }
+  }, [visible, started, gameOver, pulseAnim]);
+
+  // Snow spray animation
+  useEffect(() => {
+    if (!started || gameOver) return;
+    const anim = Animated.loop(
+      Animated.sequence([
+        Animated.timing(sprayOpacity, { toValue: 0.8, duration: 200, useNativeDriver: true }),
+        Animated.timing(sprayOpacity, { toValue: 0.3, duration: 300, useNativeDriver: true }),
+      ])
+    );
+    anim.start();
+    return () => anim.stop();
+  }, [started, gameOver, sprayOpacity]);
+
+  // Score pulse + floating "+1"
+  useEffect(() => {
+    if (score > 0) {
+      scoreScale.setValue(1.4);
+      Animated.spring(scoreScale, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 200,
+        friction: 8,
+      }).start();
+
+      const popId = Date.now();
+      const popOpacity = new Animated.Value(1);
+      const popY = new Animated.Value(0);
+      setScorePops((prev) => [...prev, { id: popId, opacity: popOpacity, y: popY }]);
+      Animated.parallel([
+        Animated.timing(popOpacity, { toValue: 0, duration: 700, useNativeDriver: true }),
+        Animated.timing(popY, { toValue: -40, duration: 700, useNativeDriver: true }),
+      ]).start(() => {
+        setScorePops((prev) => prev.filter((p) => p.id !== popId));
+      });
+    }
+  }, [score, scoreScale]);
+
+  // Game over entrance animation + score count-up
+  useEffect(() => {
+    if (gameOver) {
+      gameOverScale.setValue(0.5);
+      gameOverOpacity.setValue(0);
+
+      Animated.parallel([
+        Animated.spring(gameOverScale, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 100,
+          friction: 10,
+        }),
+        Animated.timing(gameOverOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+
+      const finalScore = scoreRef.current;
+      let frame = 0;
+      const totalFrames = Math.max(Math.min(finalScore * 2, 60), 1);
+      const countUp = () => {
+        frame++;
+        const progress = Math.min(frame / totalFrames, 1);
+        setCountUpScore(Math.round(progress * finalScore));
+        if (progress < 1) requestAnimationFrame(countUp);
+      };
+      requestAnimationFrame(countUp);
+    }
+  }, [gameOver, gameOverScale, gameOverOpacity]);
+
+  // Game loop
   useEffect(() => {
     if (!visible || !started || gameOver) return;
 
@@ -72,23 +216,20 @@ const MiniGame = ({ visible, onClose }) => {
       if (gameOverRef.current) return;
       tickCount.current++;
 
-      // Spawn gate
       if (tickCount.current % SPAWN_INTERVAL === 0) {
         const gapStart = Math.random() * (SCREEN_W - GATE_GAP - 40) + 20;
         gates.current.push({ y: -GATE_HEIGHT, gapStart, passed: false });
       }
 
-      // Move gates
-      const currentSkierX = skierPos.current;
+      const currentSkierX = skierLiveX.current;
       const skierTop = SCREEN_H - 140;
       const skierBottom = skierTop + SKIER_SIZE;
-      const skierLeft = currentSkierX;
-      const skierRight = currentSkierX + SKIER_SIZE;
+      const skierLeft = currentSkierX + HITBOX_PADDING;
+      const skierRight = currentSkierX + SKIER_SIZE - HITBOX_PADDING;
 
       gates.current = gates.current.filter((gate) => {
         gate.y += GATE_SPEED;
 
-        // Check collision
         const gateBottom = gate.y + GATE_HEIGHT;
         if (gateBottom > skierTop && gate.y < skierBottom) {
           const inLeftPole = skierRight > 0 && skierLeft < gate.gapStart;
@@ -100,7 +241,6 @@ const MiniGame = ({ visible, onClose }) => {
           }
         }
 
-        // Score
         if (!gate.passed && gate.y > skierBottom) {
           gate.passed = true;
           scoreRef.current++;
@@ -122,16 +262,66 @@ const MiniGame = ({ visible, onClose }) => {
 
   if (!visible) return null;
 
+  const bgColor = score > 10 ? '#dceef5' : score > 5 ? '#e2f0f6' : '#e8f4f8';
+
   return (
     <Modal visible={visible} animationType="fade" statusBarTranslucent>
       <View style={styles.container} {...panResponder.panHandlers}>
-        {/* Snow tracks background */}
-        <View style={styles.slope} />
+        {/* Slope background */}
+        <View style={[styles.slope, { backgroundColor: bgColor }]} />
+
+        {/* Ski track lines */}
+        {TRACK_POSITIONS.map((pct, i) => (
+          <View
+            key={`track-${i}`}
+            pointerEvents="none"
+            style={[
+              styles.trackLine,
+              {
+                left: SCREEN_W * pct,
+                transform: [{ rotate: `${(i % 2 === 0 ? 1 : -1) * 1.5}deg` }],
+              },
+            ]}
+          />
+        ))}
+
+        {/* Snowflakes */}
+        {SNOWFLAKE_CONFIGS.map((config, i) => (
+          <Animated.View
+            key={`snow-${i}`}
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              left: config.x,
+              width: config.size,
+              height: config.size,
+              borderRadius: config.size / 2,
+              backgroundColor: theme.colors.brandWhite,
+              opacity: config.opacity,
+              transform: [{ translateY: snowflakeYs[i] }],
+            }}
+          />
+        ))}
 
         {/* Score */}
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreText}>{score}</Text>
+          <Animated.View style={{ transform: [{ scale: scoreScale }] }}>
+            <Text style={styles.scoreText}>{score}</Text>
+          </Animated.View>
         </View>
+
+        {/* Floating +1 pops */}
+        {scorePops.map((pop) => (
+          <Animated.Text
+            key={pop.id}
+            style={[
+              styles.scorePop,
+              { opacity: pop.opacity, transform: [{ translateY: pop.y }] },
+            ]}
+          >
+            +1
+          </Animated.Text>
+        ))}
 
         {/* Close button */}
         <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
@@ -141,48 +331,105 @@ const MiniGame = ({ visible, onClose }) => {
         {/* Gates */}
         {gates.current.map((gate, i) => (
           <React.Fragment key={i}>
-            <View
-              style={[
-                styles.pole,
-                { top: gate.y, left: 0, width: gate.gapStart },
-              ]}
-            />
-            <View style={[styles.flag, { top: gate.y - 6, left: gate.gapStart - 6 }]}>
-              <Text style={styles.flagEmoji}>🔴</Text>
+            {/* Safe corridor highlight */}
+            <View style={{
+              position: 'absolute',
+              top: gate.y - 8,
+              left: gate.gapStart,
+              width: GATE_GAP,
+              height: GATE_HEIGHT + 6,
+              backgroundColor: 'rgba(91, 164, 212, 0.12)',
+              borderTopWidth: 1.5,
+              borderTopColor: 'rgba(255, 255, 255, 0.4)',
+              borderRadius: 4,
+              zIndex: 4,
+            }} />
+
+            {/* Left pole + flag */}
+            <View style={[styles.gatePole, { top: gate.y - 8, left: gate.gapStart - 2 }]}>
+              <View style={styles.gateFlagLeft} />
+              <View style={styles.gatePoleStick} />
             </View>
-            <View
-              style={[
-                styles.pole,
-                { top: gate.y, left: gate.gapStart + GATE_GAP, width: SCREEN_W - gate.gapStart - GATE_GAP },
-              ]}
-            />
-            <View style={[styles.flag, { top: gate.y - 6, left: gate.gapStart + GATE_GAP - 2 }]}>
-              <Text style={styles.flagEmoji}>🔵</Text>
+
+            {/* Right pole + flag */}
+            <View style={[styles.gatePole, { top: gate.y - 8, left: gate.gapStart + GATE_GAP - 2 }]}>
+              <View style={styles.gateFlagRight} />
+              <View style={styles.gatePoleStick} />
             </View>
           </React.Fragment>
         ))}
 
         {/* Skier */}
-        <Animated.View style={[styles.skier, { left: skierX, top: SCREEN_H - 140 }]}>
-          <Text style={styles.skierEmoji}>⛷️</Text>
+        <Animated.View
+          style={[
+            styles.skier,
+            {
+              left: skierX,
+              top: SCREEN_H - 140,
+              transform: [
+                {
+                  rotate: skierX.interpolate({
+                    inputRange: [0, SCREEN_W / 2, SCREEN_W - SKIER_SIZE],
+                    outputRange: ['-12deg', '0deg', '12deg'],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <View style={styles.skierShadow} />
+          <FontAwesome5 name="skiing" size={28} color={theme.colors.brandNavy} solid />
+          {started && !gameOver && (
+            <>
+              <Animated.View
+                style={[
+                  styles.sprayDot,
+                  { bottom: -6, left: 2, width: 6, height: 6, borderRadius: 3, opacity: sprayOpacity },
+                ]}
+              />
+              <Animated.View
+                style={[
+                  styles.sprayDot,
+                  { bottom: -8, right: 2, width: 4, height: 4, borderRadius: 2, opacity: sprayOpacity },
+                ]}
+              />
+            </>
+          )}
         </Animated.View>
 
         {/* Start prompt */}
         {!started && !gameOver && (
           <View style={styles.overlay}>
-            <Text style={styles.startText}>Drag to steer</Text>
-            <Text style={styles.startSubtext}>Dodge the gates!</Text>
+            <Ionicons
+              name="snow"
+              size={48}
+              color={theme.colors.brandSkyBlueLight}
+              style={{ marginBottom: 16, opacity: 0.7 }}
+            />
+            <Animated.Text style={[styles.startText, { transform: [{ scale: pulseAnim }] }]}>
+              {t('miniGame.dragToSteer')}
+            </Animated.Text>
+            <Text style={styles.startSubtext}>{t('miniGame.steerThroughGates')}</Text>
           </View>
         )}
 
         {/* Game over */}
         {gameOver && (
           <View style={styles.overlay}>
-            <Text style={styles.gameOverText}>Game Over</Text>
-            <Text style={styles.finalScore}>Score: {score}</Text>
-            <TouchableOpacity style={styles.retryBtn} onPress={reset}>
-              <Text style={styles.retryText}>Play Again</Text>
-            </TouchableOpacity>
+            <Animated.View
+              style={{
+                alignItems: 'center',
+                transform: [{ scale: gameOverScale }],
+                opacity: gameOverOpacity,
+              }}
+            >
+              <Text style={styles.gameOverText}>{t('miniGame.gameOver')}</Text>
+              <Text style={styles.finalScore}>{t('miniGame.score')}: {countUpScore}</Text>
+              <TouchableOpacity style={styles.retryBtn} onPress={reset}>
+                <Text style={styles.retryText}>{t('miniGame.playAgain')}</Text>
+              </TouchableOpacity>
+            </Animated.View>
           </View>
         )}
       </View>
@@ -197,7 +444,13 @@ const styles = StyleSheet.create({
   },
   slope: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#e8f4f8',
+  },
+  trackLine: {
+    position: 'absolute',
+    top: 0,
+    width: 1.5,
+    height: SCREEN_H,
+    backgroundColor: theme.colors.brandNavy + '08',
   },
   scoreContainer: {
     position: 'absolute',
@@ -214,6 +467,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     color: theme.colors.brandWhite,
   },
+  scorePop: {
+    position: 'absolute',
+    top: 55,
+    alignSelf: 'center',
+    fontSize: 18,
+    fontFamily: 'Inter_700Bold',
+    color: theme.colors.brandYellow,
+    zIndex: 11,
+  },
   closeBtn: {
     position: 'absolute',
     top: 56,
@@ -226,19 +488,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 20,
   },
-  pole: {
+
+  // Gate styles
+  gatePole: {
     position: 'absolute',
-    height: GATE_HEIGHT,
-    backgroundColor: theme.colors.brandNavy + '30',
-    borderRadius: 4,
-  },
-  flag: {
-    position: 'absolute',
+    alignItems: 'center',
     zIndex: 5,
   },
-  flagEmoji: {
-    fontSize: 14,
+  gateFlagLeft: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 10,
+    borderTopColor: theme.colors.brandOrange,
+    borderRightWidth: 10,
+    borderRightColor: 'transparent',
   },
+  gateFlagRight: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 10,
+    borderTopColor: theme.colors.brandSkyBlue,
+    borderLeftWidth: 10,
+    borderLeftColor: 'transparent',
+  },
+  gatePoleStick: {
+    width: 2,
+    height: GATE_HEIGHT,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderRadius: 1,
+  },
+
+  // Skier styles
   skier: {
     position: 'absolute',
     width: SKIER_SIZE,
@@ -247,14 +527,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
   },
-  skierEmoji: {
-    fontSize: 30,
+  skierShadow: {
+    position: 'absolute',
+    bottom: -4,
+    left: 4,
+    right: 4,
+    height: 8,
+    borderRadius: 50,
+    backgroundColor: 'rgba(0,0,0,0.15)',
   },
+  sprayDot: {
+    position: 'absolute',
+    backgroundColor: theme.colors.brandWhite,
+  },
+
+  // Overlays
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: theme.colors.brandNavy + 'CC',
     zIndex: 30,
   },
   startText: {
@@ -282,9 +574,10 @@ const styles = StyleSheet.create({
   },
   retryBtn: {
     backgroundColor: theme.colors.brandOrange,
-    paddingHorizontal: 32,
-    paddingVertical: 14,
-    borderRadius: theme.borderRadius.lg,
+    paddingHorizontal: 36,
+    paddingVertical: 16,
+    borderRadius: theme.borderRadius.xl,
+    ...theme.shadows.cardElevated,
   },
   retryText: {
     fontSize: 16,
