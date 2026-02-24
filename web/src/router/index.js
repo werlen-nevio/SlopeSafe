@@ -11,6 +11,7 @@ import EmbedView from '@/views/EmbedView.vue';
 import SupportView from '@/views/SupportView.vue';
 import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue';
 import ImprintView from '@/views/ImprintView.vue';
+import AboutView from '@/views/AboutView.vue';
 
 const routes = [
   {
@@ -72,6 +73,12 @@ const routes = [
     name: 'imprint',
     component: ImprintView,
     meta: { title: 'Impressum' }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutView,
+    meta: { title: 'Über SlopeSafe' }
   },
   {
     path: '/:pathMatch(.*)*',
