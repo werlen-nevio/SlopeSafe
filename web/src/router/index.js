@@ -8,6 +8,9 @@ import MapView from '@/views/MapView.vue';
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import EmbedView from '@/views/EmbedView.vue';
+import SupportView from '@/views/SupportView.vue';
+import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue';
+import ImprintView from '@/views/ImprintView.vue';
 
 const routes = [
   {
@@ -51,6 +54,24 @@ const routes = [
     name: 'register',
     component: RegisterView,
     meta: { guest: true, title: 'Register' }
+  },
+  {
+    path: '/support',
+    name: 'support',
+    component: SupportView,
+    meta: { title: 'Support' }
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: PrivacyPolicyView,
+    meta: { title: 'Datenschutzerklärung' }
+  },
+  {
+    path: '/imprint',
+    name: 'imprint',
+    component: ImprintView,
+    meta: { title: 'Impressum' }
   },
   {
     path: '/:pathMatch(.*)*',

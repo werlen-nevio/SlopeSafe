@@ -21,7 +21,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p class="copyright">&copy; {{ currentYear }} SlopeSafe</p>
+        <div class="footer-bottom-content">
+          <p class="copyright">&copy; {{ currentYear }} SlopeSafe</p>
+          <router-link to="/support" class="footer-support-link">{{ $t('footer.support') }}</router-link>
+        </div>
       </div>
     </div>
   </footer>
@@ -150,10 +153,28 @@ const formattedUpdateTime = computed(() => {
   text-align: center;
 }
 
+.footer-bottom-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
 .copyright {
   font-size: 0.8125rem;
   color: #94A3B8;
   margin: 0;
+}
+
+.footer-support-link {
+  font-size: 0.8125rem;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.footer-support-link:hover {
+  color: #FFFFFF;
 }
 
 @media (max-width: 768px) {
