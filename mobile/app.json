@@ -13,7 +13,7 @@
       "backgroundColor": "#1B3B5F"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.slopesafe.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "SlopeSafe uses your location to sort ski resorts by distance.",
