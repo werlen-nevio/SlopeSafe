@@ -85,6 +85,11 @@
             {{ $t('auth.hasAccount') }}
             <router-link to="/login">{{ $t('auth.login') }}</router-link>
           </p>
+          <div class="auth-legal-links">
+            <router-link to="/privacy">{{ $t('support.privacyPolicy') }}</router-link>
+            <span class="legal-separator">|</span>
+            <router-link to="/imprint">{{ $t('support.imprint') }}</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -299,6 +304,31 @@ const handleRegister = async () => {
 .auth-footer a:hover {
   color: var(--color-accent-hover);
   text-decoration: underline;
+}
+
+.auth-legal-links {
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.auth-legal-links a {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.auth-legal-links a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.legal-separator {
+  color: var(--color-text-tertiary);
+  font-size: 0.8125rem;
 }
 
 @media (max-width: 480px) {

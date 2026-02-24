@@ -287,6 +287,14 @@
     "ctaExplore": "Scopri i comprensori",
     "ctaContact": "Contatto"
   },
+  "cookie": {
+    "title": "Cookie & Privacy",
+    "message": "Questo sito utilizza l'archiviazione locale per la gestione delle sessioni e le impostazioni. Non vengono utilizzati cookie di tracciamento.",
+    "privacyLink": "Privacy",
+    "imprintLink": "Impressum",
+    "accept": "Accetta",
+    "decline": "Rifiuta"
+  },
   "footer": {
     "support": "Supporto",
     "description": "Informazioni in tempo reale sul pericolo valanghe per i comprensori sciistici svizzeri",

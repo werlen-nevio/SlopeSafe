@@ -287,6 +287,14 @@
     "ctaExplore": "Explore Resorts",
     "ctaContact": "Contact"
   },
+  "cookie": {
+    "title": "Cookies & Privacy",
+    "message": "This website uses local storage for session management and settings. No tracking cookies are used.",
+    "privacyLink": "Privacy Policy",
+    "imprintLink": "Imprint",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "footer": {
     "support": "Support",
     "description": "Real-time avalanche danger information for Swiss ski resorts",

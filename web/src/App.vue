@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import AppHeader from './components/common/AppHeader.vue'
 import AppFooter from './components/common/AppFooter.vue'
+import CookieBanner from './components/common/CookieBanner.vue'
 import { useAuthStore } from './stores/auth';
 import { useFavoritesStore } from './stores/favorites';
 
@@ -29,6 +30,7 @@ onMounted(async () => {
       <router-view />
     </main>
     <AppFooter />
+    <CookieBanner />
   </div>
 </template>
 

@@ -287,6 +287,14 @@
     "ctaExplore": "Skigebiete entdecken",
     "ctaContact": "Kontakt"
   },
+  "cookie": {
+    "title": "Cookies & Datenschutz",
+    "message": "Diese Website verwendet lokale Speicherung für Sitzungsverwaltung und Einstellungen. Es werden keine Tracking-Cookies eingesetzt.",
+    "privacyLink": "Datenschutz",
+    "imprintLink": "Impressum",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen"
+  },
   "footer": {
     "support": "Kontakt",
     "description": "Echtzeit-Informationen zur Lawinengefahr für Schweizer Skigebiete",

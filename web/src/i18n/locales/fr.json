@@ -287,6 +287,14 @@
     "ctaExplore": "Découvrir les stations",
     "ctaContact": "Contact"
   },
+  "cookie": {
+    "title": "Cookies & Confidentialité",
+    "message": "Ce site utilise le stockage local pour la gestion des sessions et les paramètres. Aucun cookie de suivi n'est utilisé.",
+    "privacyLink": "Confidentialité",
+    "imprintLink": "Mentions légales",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
   "footer": {
     "support": "Support",
     "description": "Informations en temps réel sur le danger d'avalanche pour les stations de ski suisses",
