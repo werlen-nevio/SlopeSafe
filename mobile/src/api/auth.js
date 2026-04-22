@@ -29,5 +29,10 @@ export const authApi = {
   async updateNotificationPreferences(preferences) {
     const response = await apiClient.put('/auth/notifications/preferences', preferences);
     return response.data;
+  },
+
+  async deleteAccount() {
+    const response = await apiClient.delete('/auth/account');
+    return response.data;
   }
 };

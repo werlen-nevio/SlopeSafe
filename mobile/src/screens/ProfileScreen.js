@@ -8,10 +8,10 @@ import { useAuth } from '../contexts/AuthContext';
 import MiniGame from '../components/MiniGame';
 import { theme } from '../theme';
 
-const APP_VERSION = Constants.expoConfig?.version ?? '1.0.0';
+const APP_VERSION = Constants.expoConfig?.version ?? '1.0.1';
 
 const ProfileScreen = ({ navigation }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, deleteAccount } = useAuth();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [showGame, setShowGame] = useState(false);
@@ -36,6 +36,27 @@ const ProfileScreen = ({ navigation }) => {
       [
         { text: t('common.cancel'), style: 'cancel' },
         { text: t('auth.logout'), style: 'destructive', onPress: logout },
+      ]
+    );
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      t('profile.deleteAccountConfirmTitle'),
+      t('profile.deleteAccountConfirmMessage'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('profile.deleteAccount'),
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteAccount();
+            } catch (err) {
+              Alert.alert(t('common.error'), t('profile.deleteAccountError'));
+            }
+          },
+        },
       ]
     );
   };
@@ -89,6 +110,16 @@ const ProfileScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityRole="button" accessibilityLabel={t('auth.logout')}>
         <Ionicons name="log-out-outline" size={20} color={theme.colors.brandWhite} />
         <Text style={styles.logoutText}>{t('auth.logout')}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.deleteAccountButton}
+        onPress={handleDeleteAccount}
+        accessibilityRole="button"
+        accessibilityLabel={t('profile.deleteAccount')}
+      >
+        <Ionicons name="trash-outline" size={18} color={theme.colors.danger} />
+        <Text style={styles.deleteAccountText}>{t('profile.deleteAccount')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -178,6 +209,20 @@ const styles = StyleSheet.create({
     color: theme.colors.brandWhite,
     fontSize: theme.typography.sizes.base,
     fontFamily: 'Inter_600SemiBold',
+  },
+  deleteAccountButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    padding: 12,
+  },
+  deleteAccountText: {
+    color: theme.colors.danger,
+    fontSize: theme.typography.sizes.sm,
+    fontFamily: 'Inter_500Medium',
   },
 });
 

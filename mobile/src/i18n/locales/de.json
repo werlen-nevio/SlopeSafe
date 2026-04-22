@@ -169,7 +169,11 @@
     "notificationHistory": "Benachrichtigungsverlauf",
     "language": "Sprache",
     "about": "Über",
-    "version": "Version"
+    "version": "Version",
+    "deleteAccount": "Konto löschen",
+    "deleteAccountConfirmTitle": "Konto wirklich löschen?",
+    "deleteAccountConfirmMessage": "Diese Aktion ist unwiderruflich. Alle Ihre Daten (Favoriten, Alarmregeln, Benachrichtigungen) werden dauerhaft gelöscht.",
+    "deleteAccountError": "Konto konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
   },
   "notifications": {
     "title": "Benachrichtigungen",

@@ -169,7 +169,11 @@
     "notificationHistory": "Notification History",
     "language": "Language",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "deleteAccount": "Delete Account",
+    "deleteAccountConfirmTitle": "Delete account?",
+    "deleteAccountConfirmMessage": "This action cannot be undone. All your data (favorites, alert rules, notifications) will be permanently deleted.",
+    "deleteAccountError": "Could not delete account. Please try again."
   },
   "notifications": {
     "title": "Notifications",

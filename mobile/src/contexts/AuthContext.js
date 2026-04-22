@@ -102,6 +102,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteAccount = async () => {
+    try {
+      await authApi.deleteAccount();
+    } catch (err) {
+      console.error('Delete account error:', err);
+      throw err;
+    } finally {
+      setToken(null);
+      setUser(null);
+      await AsyncStorage.removeItem('auth_token');
+      await AsyncStorage.removeItem('user');
+    }
+  };
+
   const value = {
     user,
     token,
@@ -111,7 +125,8 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
-    updateNotificationPreferences
+    updateNotificationPreferences,
+    deleteAccount
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

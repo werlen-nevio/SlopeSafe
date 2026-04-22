@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/auth/device-token', [AuthController::class, 'updateDeviceToken']);
         Route::put('/auth/notifications/preferences', [AuthController::class, 'updateNotificationPreferences']);
         Route::get('/auth/me', [AuthController::class, 'me']);
+        Route::delete('/auth/account', [AuthController::class, 'deleteAccount']);
 
         // Favorite routes
         Route::get('/favorites', [FavoriteController::class, 'index']);
